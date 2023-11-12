@@ -3,13 +3,13 @@ import java.util.List;
 
 public class Continente {
 
-    private String continente;
+    private String nombre;
     private int numTerritorios;
     private int valor;
     private List<String> territorios = new ArrayList<>();
 
-    public Continente(String continente){
-        this.continente=continente;
+    public Continente(String nombre){
+        this.nombre = nombre;
         String nomTerritorios[] = {"Alaska","Alberta","Mexico","Estados Unidos del Este","Groenlandia","Territorios del Noroeste",
         "Ontario","Quebec","Estados Unidos del Oeste","Argentina","Brasil","Peru","Venezuela","Gran Bretaña","Islandia",
                 "Europa del Norte","Escandinavia","Europa del Sur","Rusia","Europa Occidental","Congo","Africa Oriental",
@@ -17,7 +17,7 @@ public class Continente {
         "Oriente Medio","Mongolia","Sudeste Asiatico","Siberia","Urai","Yakutsk","Australia Oriental","Indonesia","Nueva Guinea",
         "Australia Occidental"};
 
-        switch (continente){
+        switch (nombre){
             case "America del Norte":
                 this.numTerritorios=9;
                 this.valor=5;
@@ -55,5 +55,9 @@ public class Continente {
                     this.territorios.add(nomTerritorios[i]);
                 }
         }
+    }
+
+    public String getNombre(){
+        return this.nombre;
     }
 }
