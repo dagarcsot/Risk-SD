@@ -1,20 +1,20 @@
 public class Tarjeta {
 
-    private String territorio;
+    private String pais;
     private String tropa;
 
     public Tarjeta(){
-        this.territorio="";
+        this.pais="";
         this.tropa="";
     }
 
     public Tarjeta(String territorio, String tropa){
-        this.territorio=territorio;
+        this.pais=territorio;
         this.tropa=tropa;
     }
 
     public String getTerritorio(){
-        return this.territorio;
+        return this.pais;
     }
 
     public String getTropa(){
@@ -23,7 +23,7 @@ public class Tarjeta {
 
     @Override
     public String toString() {
-        return "Territorio: "+this.territorio+"\n"+
+        return "Pais: "+this.pais+"\n"+
                 "Tropa: "+this.tropa+"\n";
     }
 }
