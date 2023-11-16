@@ -6,16 +6,23 @@ public class Pais {
     private Jugador propietario; //jugador que tiene el país
     private List<Pais> paisesFrontera;
 
+
     Pais(String nombre){
         this.nombre = nombre;
         this.propietario = null;
         this.nomTropas = 0;
     }
 
+    public String getNombre(){
+        return this.nombre;
+    }
+
     @Override
     public String toString() {
         return "Pais: " + this.nombre + "\nPropietario: " + ((this.propietario != null) ? this.propietario.getNombre() : "No tiene propietario") + "\n";
     }
+
+
 
 
 }

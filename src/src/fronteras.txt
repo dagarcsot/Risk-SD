@@ -1,0 +1,42 @@
+Alaska,Alberta,Territorio del Noroeste,Kamchatka
+Alberta,Alaska,Territorio del Noroeste,Ontario,Estados Unidos del Oeste
+America Central,Estados Unidos del Oeste,Venezuela
+Estados Unidos del Este,Estados Unidos del Oeste,Ontario,Quebec
+Groenlandia,Territorio del Noroeste,Ontario,Quebec,Islandia
+Territorio del Noroeste,Alaska,Groenlandia,Ontario,Alberta
+Ontario,Territorio del Noroeste,Groenlandia,Quebec,Estados Unidos del Este,Estados Unidos del Oeste,Alberta
+Quebec,Ontario,Groenlandia,Estados Unidos del Este
+Estados Unidos del Oeste,Alberta,Ontario,Estados Unidos del Este,America Central
+Argentina,Venezuela,Brasil
+Brasil,Venezuela,Africa del Norte,Argentina
+Venezuela,America Central,Brasil,Argentina
+Gran Bretana,Islandia,Escandinavia,Europa del Norte,Europa del Oeste
+Islandia,Groenlandia,Gran Bretana
+Europa del Norte,Gran Bretana,Ucrania,Europa del Sur,Escandinavia
+Escandinavia,Gran Bretana,Ucrania
+Europa del Sur,Europa del Oeste,Europa del Norte,Ucrania,Egipto,Africa del Norte
+Ucrania,Escandinavia,Ural,Afganistan,Cercano Oriente,Europa del Sur,Europa del Norte
+Europa del Oeste,Gran Bretana,Europa del Norte,Europa del Sur,Africa del Norte
+Congo,Africa del Norte,Egipto,Africa del Este,Sudafrica
+Africa del Este,Egipto,Madagascar,Sudafrica,Congo
+Egipto,Africa del Sur,Cercano Oriente,Africa del Este,Congo,Africa del Norte
+Madagascar,Africa del Este,Sudafrica
+Africa del Norte,Europa del Oeste,Africa del Sur,Egipto,Congo,Brasil
+Sudafrica,Congo,Africa del Este,Madagascar
+Afganistan,Ucrania,Ural,Siberia,China,India,Cercano Oriente
+China,Afganistan,Siberia,Mongolia,Siam,India
+India,Cercano Oriente,Afganistan,China,Siam
+Irkutsk,Siberia,Yakutsk,Kamchatka,Mongolia
+Japon,Kamchatka,Mongolia
+Kamchatka,Yakutsk,Alaska,Japon,Mongolia,Irkutsk
+Cercano Oriente,Ucrania,Afganistan,India,Egipto
+Mongolia,Siberia,Irkutsk,Kamchatka,Japon,China,Afganistan
+Siam,India,China,Indonesia
+Siberia,Ural,Yakutsk,Irkutsk,Mongolia,China,Afganistan
+Ural,Ucrania,Siberia,Afganistan
+Yakutsk,Siberia,Kamchatka,Irkutsk
+Australia Oriental,Nueva Guinea,LotR,Australia Occidental
+Indonesia,Siam,Nueva Guinea,Australia Occidental
+LotR,Australia Oriental
+Nueva Guinea,Indonesia,Australia Oriental,Australia Occidental
+Australia Occidental,Indonesia,Nueva Guinea,Australia Oriental
