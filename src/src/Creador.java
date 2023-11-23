@@ -17,7 +17,7 @@ public class Creador {
              DataInputStream dis2 = new DataInputStream(new FileInputStream("fronteras.txt"))
         ){
             String linea;
-            while ( (linea = dis1.readLine()) != null) { //se crean los paises
+            while ( (linea = dis.readLine()) != null) { //se crean los paises
                 this.paises.add(new Pais(linea.trim()));
             }
             while ( (linea = dis1.readLine()) != null) { //se crean los continentes
