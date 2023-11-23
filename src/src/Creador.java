@@ -3,28 +3,29 @@ import java.util.*;
 
 
 public class Creador {
-    private final List<Pais> paises;
-    private final List<Continente> continentes;
-    Map<Pais,List<Pais>> fronteras;
+    private List<Pais> paises; //todos los paises del mapa
+    private List<Continente> continentes; //todos los continentes del mapa
+    private Map<Pais,List<Pais>> fronteras;  //para cada nombre pais añadimos una lista con sus fronteras
 
     Creador(){
-        paises = new ArrayList<>();
-        continentes = new ArrayList<>();
-        fronteras = new HashMap<>();
+        this.paises = new ArrayList<>();
+        this.continentes = new ArrayList<>();
+        this.fronteras = new HashMap<>();
 
-        try (DataInputStream dis1 = new DataInputStream(new FileInputStream("continentes.txt"));
-            DataInputStream dis2 = new DataInputStream(new FileInputStream("fronteras.txt"))
+        try (DataInputStream dis = new DataInputStream(new FileInputStream("paises.txt"));
+             DataInputStream dis1 = new DataInputStream(new FileInputStream("continentes.txt"));
+             DataInputStream dis2 = new DataInputStream(new FileInputStream("fronteras.txt"))
         ){
             String linea;
-            while ( (linea = dis1.readLine()) != null) { //se crean los paises y continentes
+            while ( (linea = dis1.readLine()) != null) { //se crean los paises
+                this.paises.add(new Pais(linea.trim()));
+            }
+            while ( (linea = dis1.readLine()) != null) { //se crean los continentes
                 this.continentes.add(crearContinente(linea));
             }
             while ( (linea = dis2.readLine()) != null) { // se crean las fronteras
-                List<Pais> listaAUX = crearFronteras(linea);
-                this.fronteras.put(listaAUX.get(0),listaAUX.subList(1, listaAUX.size()));
-
+                crearFronteras(linea);
             }
-
 
         } catch (IOException e){
             e.printStackTrace();
@@ -40,39 +41,40 @@ public class Creador {
         return this.fronteras;
     }
 
-    private Continente crearContinente(String linea) {
+    private Continente crearContinente(String linea) { //creamos los continentes añadiendole los paises ya creados antes
         String[] partes = linea.split(",");
         String nombreContinente = partes[0].trim();
         int tropas = Integer.parseInt(partes[1].trim());
         List<Pais> lPaises = new ArrayList<>();
 
-        for (int i = 2; i < partes.length; i++) {
-            lPaises.add(new Pais(partes[i].trim()));
-            this.paises.add(new Pais(partes[i].trim()));
-        }
-
-        return new Continente(nombreContinente, tropas, lPaises);
-    }
-    private List<Pais> crearFronteras(String linea) {
-        String[] partes = linea.split(",");
-        String paisAUX = partes[0];
-        List<String> listaFronteras = Arrays.asList(partes).subList(1, partes.length);
-        List<Pais> paisYFronteras = new ArrayList<>();
-        for (Pais aux1 : this.paises) {
-            if (paisAUX.equals(aux1.getNombre())) {
-                paisYFronteras.add(aux1);
-                break;
-            }
-        }
-        for(int i = 0; i < listaFronteras.size();i++){
-            for (Pais aux2 : this.paises) {
-                if (listaFronteras.get(i).equals(aux2)) {
-                    paisYFronteras.add(this.paises.get(i));
+        for (int i=2; i < partes.length; i++) {
+            for(Pais p : this.paises){
+                if(p.getNombre().equals(partes[i].trim())){
+                    lPaises.add(p);
                 }
             }
-
         }
-        return  paisYFronteras;
+        return new Continente(nombreContinente, tropas, lPaises);
     }
+
+    private void crearFronteras(String linea){ //buscamos los paises frontera
+        String[] partes = linea.split(",");
+        Pais pais = null;
+        List<Pais> front = new ArrayList<>();
+
+        for(int i=1;i<partes.length;i++){
+            for (Pais p : this.paises) {
+                if(partes[0].trim().equals(p.getNombre())){
+                    pais=p;
+                }
+                if (partes[i].trim().equals(p.getNombre())) {
+                    front.add(p);
+                }
+            }
+        }
+        pais.agnadirFronteras(front); //añadimos al pais sus paises fronteras
+        this.fronteras.put(pais,front); //añadimos al mapa la relación del pais con sus fronteras
+    }
+
 
 }

@@ -12,14 +12,7 @@ public class Continente {
         this.nombre = nombre;
         this.valor = valor;
         this.paises = lPaises;
-
-
     }
-
-    void addPaises(List<Pais> listaPaises) {
-        this.paises = listaPaises;
-    }
-
     public String getNombre() {
         return this.nombre;
     }
@@ -30,6 +23,14 @@ public class Continente {
 
     public int getValor() {
         return this.valor;
+    }
+
+    public void agnadirPaises(List<Pais> listaPaises) {
+        this.paises = listaPaises;
+    }
+
+    public List<Pais> getPaises() {
+        return this.paises;
     }
 
     @Override

@@ -17,12 +17,24 @@ public class Pais {
         return this.nombre;
     }
 
+    public void agnadirFronteras(List<Pais> l){
+        this.paisesFrontera=l;
+    }
+
+    public List<Pais> getPaisesFrontera(){
+        return this.paisesFrontera;
+    }
+
+    public void asignarPropietario(Jugador j){
+        this.propietario=j;
+    }
+
+    public Jugador getPropietario(){
+        return this.propietario;
+    }
+
     @Override
     public String toString() {
         return "Pais: " + this.nombre + "\nPropietario: " + ((this.propietario != null) ? this.propietario.getNombre() : "No tiene propietario") + "\n";
     }
-
-
-
-
 }

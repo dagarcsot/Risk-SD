@@ -1,0 +1,41 @@
+Alaska, Alberta, Territorio del Noroeste, Kamchatka
+Alberta, Alaska, Territorio del Noroeste, Ontario, Estados Unidos del Oeste
+América Central, Estados Unidos del Oeste, Venezuela
+Estados Unidos del Este, Estados Unidos del Oeste, Ontario, Quebec
+Groenlandia, Territorio del Noroeste, Ontario, Quebec, Islandia
+Territorio del Noroeste, Alaska, Groenlandia, Ontario, Alberta
+Ontario, Territorio del Noroeste, Groenlandia, Quebec, Estados Unidos del Este, Estados Unidos del Oeste, Alberta
+Quebec, Ontario, Groenlandia, Estados Unidos del Este
+Estados Unidos del Oeste, Alberta, Ontario, Estados Unidos del Este, América Central
+Argentina, Venezuela, Brasil
+Brasil, Venezuela, África del Norte, Argentina
+Venezuela, América Central, Brasil, Argentina
+Gran Bretaña, Islandia, Escandinavia, Europa del Norte, Europa Occidental
+Islandia, Groenlandia, Gran Bretaña
+Europa del Norte, Gran Bretaña, Ucrania, Europa del Sur, Europa Occidental
+Escandinavia, Gran Bretaña, Ucrania
+Europa del Sur, Europa Occidental, Europa del Norte, Ucrania, Egipto, África del Norte
+Ucrania, Escandinavia, Ural, Afganistán, Cercano Oriente, Europa del Sur, Europa del Norte
+Europa Occidental, Gran Bretaña, Europa del Norte, Europa del Sur, África del Norte
+Congo, África del Norte, Egipto, África Oriental, Sudáfrica
+África Oriental, Egipto, Madagascar, Sudáfrica, Congo
+Egipto, Europa del Sur, Cercano Oriente, África Oriental, Congo, África del Norte
+Madagascar, África Oriental, Sudáfrica
+África del Norte, Europa Occidental, Europa del Sur, Egipto, Congo, Brasil
+Sudáfrica, Congo, África Oriental, Madagascar
+Afganistán, Ucrania, Ural, Siberia, China, India, Cercano Oriente
+China, Afganistán, Siberia, Mongolia, Siam, India
+India, Cercano Oriente, Afganistán, China, Siam
+Irkutsk, Siberia, Yakutsk, Kamchatka, Mongolia
+Japón, Kamchatka, Mongolia
+Kamchatka, Yakutsk, Alaska, Japón, Mongolia, Irkutsk
+Cercano Oriente, Ucrania, Afganistán, India, Egipto
+Mongolia, Siberia, Irkutsk, Kamchatka, Japón, China
+Siam, India, China, Indonesia
+Siberia, Ural, Yakutsk, Irkutsk, Mongolia, China, Afganistán
+Ural, Ucrania, Siberia, Afganistán
+Yakutsk, Siberia, Kamchatka, Irkutsk
+Australia Oriental, Nueva Guinea, Australia Occidental
+Indonesia, Siam, Nueva Guinea, Australia Occidental
+Nueva Guinea, Indonesia, Australia Oriental, Australia Occidental
+Australia Occidental, Indonesia, Nueva Guinea, Australia Oriental

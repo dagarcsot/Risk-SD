@@ -1,0 +1,6 @@
+América del Norte,5,Alaska,Alberta,América Central,Estados Unidos del Este,Groenlandia,Territorio del Noroeste,Ontario,Quebec,Estados Unidos del Oeste
+América del Sur,2,Argentina,Brasil,Venezuela
+Europa,5,Gran Bretaña,Islandia,Europa del Norte,Escandinavia,Europa del Sur,Ucrania,Europa Occidental
+África,3,Congo,África Oriental,Egipto,Madagascar,África del Norte,Sudáfrica
+Asia,7,Afganistán,China,India,Irkutsk,Japón,Kamchatka,Cercano Oriente,Mongolia,Siam,Siberia,Ural,Yakutsk
+Oceanía,2,Australia Oriental,Indonesia,Nueva Guinea,Australia Occidental
