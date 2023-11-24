@@ -17,4 +17,24 @@ public class Jugador {
     public String getNombre() {
         return this.nombre;
     }
+
+    public void setNumTropas(int numTropas) {
+        this.numTropas = numTropas;
+    }
+
+    public int getNumTropas() {
+        return this.numTropas;
+    }
+
+    public int getTropasDisponibles() {
+        return this.tropasDisponibles;
+    }
+
+    public List<Pais> getPaisesOcupados() {
+        return this.paisesOcupados;
+    }
+
+    public void setPaisesOcupados(List<Pais> paisesOcupados) {
+        this.paisesOcupados = paisesOcupados;
+    }
 }
