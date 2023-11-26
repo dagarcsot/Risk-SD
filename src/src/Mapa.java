@@ -83,7 +83,7 @@ public class Mapa {
         return this.mapPaises.get(nom).getNumTropas();
     }
 
-    public List<Pais> getPaisesLibres(){ //devuelve los paises que no tengan propietario
+    public List<Pais> getPaisesLibres(){ //devuelve los paises que no tengan propietario //creo que no hace falta si asignamos aleatoriamente a los paises un propietario al principio.
         List<Pais> libres = new ArrayList<>();
 
         for(Pais p : this.paises){
