@@ -1,5 +1,7 @@
 import java.util.*;
 
+import static java.util.Arrays.stream;
+
 public class Jugador {
 
     private String nombre;
@@ -103,6 +105,74 @@ public class Jugador {
         }
     }
 
+
+    public void atacarPais(Pais atacante, Pais defensor) {
+        //PRE: atacante debe pertenecerle y defensor no.
+        // Además son adyacentes.
+        // El pais atacante debe tener más de 1 tropa.
+        //numDados = {1,2,3}
+        Dado d = new Dado();
+        String jugadorAtacante = atacante.getPropietario().getNombre();
+        String jugadorDefensor = defensor.getPropietario().getNombre();
+        int tropasAtacante = atacante.getNumTropas();
+        int tropasDefensor = defensor.getNumTropas();
+        int numDadosMax = atacante.numDadosMaxPuedeTirar();
+        String s = "(1";
+        if (numDadosMax > 2) {
+            s = s + ",2";
+            if (numDadosMax > 3) {
+                s = s + ",3";
+            }
+        }
+        Scanner read = new Scanner(System.in);
+        int numDadosAtacante;
+        do {
+            System.out.println(this.nombre + " elige los dados que vas a tirar. " + s + " dados).");
+            numDadosAtacante = read.nextInt();
+        } while (numDadosAtacante > numDadosMax);
+        int numDadosDefensor = defensor.getNumTropas() == 1 ? 1 : 2;
+
+        System.out.println(atacante.getNombre() + " (" + jugadorAtacante + ") ataca a " + defensor.getNombre() + " (" + jugadorDefensor + ").");
+        System.out.println("El atacante" + "tirará " + numDadosAtacante + " dados.");
+        System.out.println("El defensor" + "tirará " + numDadosDefensor + " dados.");
+
+        int sumaAtaque = 0;
+
+        System.out.println(jugadorAtacante + " tira los dados (ENTER):");
+        read.nextLine();
+        int[] vAtacante = d.tirarDados(numDadosAtacante);
+        String s1 = jugadorAtacante + " has sacado: " + vAtacante[0];
+        for (int i = 1; i < numDadosAtacante; i++) {
+            s1 = s1 + "," + vAtacante[i];
+        }
+
+        System.out.println(jugadorDefensor + " tira los dados:");
+        int[] vDefensor = d.tirarDados(numDadosDefensor);
+        String s2 = jugadorDefensor + " has sacado: " + vDefensor[0];
+        for (int i = 1; i < numDadosAtacante; i++) {
+            s2 = s2 + "," + vDefensor[i];
+        }
+
+
+        if(numDadosDefensor == 1){ //1 dado del defensor
+            if(stream(vAtacante).max().orElseThrow() > vDefensor[0]){ //gana atacante
+
+            }else{ //gana defensor
+                atacante.setNumTropas(tropasAtacante - 1);
+            }
+
+        }else{
+
+        }
+
+
+
+
+
+
+
+    }
+
     public void eliminarTarjeta(Tarjeta t) {
         this.tarjetas.remove(t);
     }
@@ -111,7 +181,7 @@ public class Jugador {
         return new ArrayList<>(this.tarjetas);
     }
 
-    public int getNumJugadores(){
+    public int getNumJugadores() {
         return numJugadores;
     }
 

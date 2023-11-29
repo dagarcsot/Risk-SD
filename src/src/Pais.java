@@ -7,17 +7,17 @@ public class Pais {
     private List<Pais> paisesFrontera;
 
 
-    Pais(String nombre){
+    Pais(String nombre) {
         this.nombre = nombre;
         this.propietario = null;
         this.numTropas = 0;
     }
 
-    public String getNombre(){
+    public String getNombre() {
         return this.nombre;
     }
 
-    public int getNumTropas(){
+    public int getNumTropas() {
         return this.numTropas;
     }
 
@@ -25,20 +25,36 @@ public class Pais {
         this.numTropas = numTropas;
     }
 
-    public void setFronteras(List<Pais> l){
-        this.paisesFrontera=l;
+    public void setFronteras(List<Pais> l) {
+        this.paisesFrontera = l;
     }
 
-    public List<Pais> getPaisesFrontera(){
+    public List<Pais> getPaisesFrontera() {
         return this.paisesFrontera;
     }
 
-    public void asignarPropietario(Jugador j){
-        this.propietario=j;
+    public void asignarPropietario(Jugador j) {
+        this.propietario = j;
     }
 
-    public Jugador getPropietario(){
+    public Jugador getPropietario() {
         return this.propietario;
+    }
+
+    public boolean sonAdyacentes(Pais p) {
+        return this.paisesFrontera.contains(p);
+    }
+
+    public boolean puedeAtacar() {
+        return this.numTropas >= 2;
+    }
+
+    public int numDadosMaxPuedeTirar() {
+        if (this.numTropas < 4) {
+            return this.numTropas - 1;
+        } else {
+            return 3;
+        }
     }
 
     @Override
