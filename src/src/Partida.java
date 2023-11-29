@@ -15,8 +15,8 @@ public class Partida {
 
         System.out.println("Escribe el numero de jugadores (3-6)");
         int numJ = read.nextInt();
+        int numTropas = 0; //numero de tropas por jugador
 
-        int numTropas = 0;
         while(numTropas == 0) {
             switch (numJ) {
                 case 3:
@@ -33,6 +33,8 @@ public class Partida {
                     break;
                 default:
                     System.out.println("Número de jugadores incorrecto (3-6).");
+                    System.out.println("Escribe el numero de jugadores (3-6)");
+                    numJ = read.nextInt();
 
             }
         }
@@ -52,8 +54,7 @@ public class Partida {
 
     }
 
-    public  List<Jugador> elegirOrden(int numJ,List<Jugador> listAUX){ //elegir orden
-
+    public  static List<Jugador> elegirOrden(int numJ,List<Jugador> listAUX){ //elegir orden
         return null;
     }
 
