@@ -1,8 +1,9 @@
+import java.io.Serializable;
 import java.util.*;
 
 import static java.util.Arrays.stream;
 
-public class Jugador {
+public class Jugador implements Serializable {
 
     private String nombre;
     private int numTropas; //numero de tropas que tiene el jugador en el mapa
@@ -21,6 +22,7 @@ public class Jugador {
         this.continentesOcupados = new HashMap<>();
         numJugadores++;
     }
+
 
     public String getNombre() {
         return this.nombre;
@@ -107,69 +109,53 @@ public class Jugador {
 
 
     public void atacarPais(Pais atacante, Pais defensor) {
-        //PRE: atacante debe pertenecerle y defensor no.
+        //PRE: pais atacante debe pertenecer al jugador y pais defensor no.
         // Además son adyacentes.
         // El pais atacante debe tener más de 1 tropa.
         //numDados = {1,2,3}
-        Dado d = new Dado();
-        String jugadorAtacante = atacante.getPropietario().getNombre();
+        Dado dado = new Dado();
+        String jugadorAtacante = this.getNombre();
         String jugadorDefensor = defensor.getPropietario().getNombre();
         int tropasAtacante = atacante.getNumTropas();
         int tropasDefensor = defensor.getNumTropas();
-        int numDadosMax = atacante.numDadosMaxPuedeTirar();
-        String s = "(1";
-        if (numDadosMax > 2) {
-            s = s + ",2";
-            if (numDadosMax > 3) {
-                s = s + ",3";
-            }
-        }
+
         Scanner read = new Scanner(System.in);
-        int numDadosAtacante;
-        do {
-            System.out.println(this.nombre + " elige los dados que vas a tirar. " + s + " dados).");
-            numDadosAtacante = read.nextInt();
-        } while (numDadosAtacante > numDadosMax);
-        int numDadosDefensor = defensor.getNumTropas() == 1 ? 1 : 2;
+
+        int numDadosAtacante = 3;//logica de ataque simplificada (no tiene en cuenta el numero de tropas)
+        int numDadosDefensor = 2;
 
         System.out.println(atacante.getNombre() + " (" + jugadorAtacante + ") ataca a " + defensor.getNombre() + " (" + jugadorDefensor + ").");
         System.out.println("El atacante" + "tirará " + numDadosAtacante + " dados.");
         System.out.println("El defensor" + "tirará " + numDadosDefensor + " dados.");
 
-        int sumaAtaque = 0;
+        System.out.println("El atacante tira los dados: [pulsa ENTER]");
+        read.nextInt();
+        int puntosAtacante = dado.tirarDados(3);
+        int puntosDefensor = dado.tirarDados(2);
+        System.out.println("El atacante ha sacado: " + puntosAtacante);
+        System.out.println("El defensor ha sacado: " + puntosDefensor);
 
-        System.out.println(jugadorAtacante + " tira los dados (ENTER):");
-        read.nextLine();
-        int[] vAtacante = d.tirarDados(numDadosAtacante);
-        String s1 = jugadorAtacante + " has sacado: " + vAtacante[0];
-        for (int i = 1; i < numDadosAtacante; i++) {
-            s1 = s1 + "," + vAtacante[i];
-        }
-
-        System.out.println(jugadorDefensor + " tira los dados:");
-        int[] vDefensor = d.tirarDados(numDadosDefensor);
-        String s2 = jugadorDefensor + " has sacado: " + vDefensor[0];
-        for (int i = 1; i < numDadosAtacante; i++) {
-            s2 = s2 + "," + vDefensor[i];
-        }
-
-
-        if(numDadosDefensor == 1){ //1 dado del defensor
-            if(stream(vAtacante).max().orElseThrow() > vDefensor[0]){ //gana atacante
-
-            }else{ //gana defensor
-                atacante.setNumTropas(tropasAtacante - 1);
+        if(puntosAtacante>puntosDefensor){
+            System.out.println("Gana el jugador: " + jugadorAtacante);
+            defensor.setPropietario(this);
+            defensor.setNumTropas(1);
+            atacante.setNumTropas(atacante.getNumTropas()-1);
+            System.out.println("Ahora el pais: " + defensor.getNombre() + " es propiedad de " + jugadorAtacante);
+            this.addPais(defensor);
+        } else{
+            if(puntosAtacante<puntosDefensor){
+                System.out.println("Gana el jugador: " + jugadorDefensor);
+                int tropasAntes = atacante.getNumTropas();
+                atacante.setNumTropas(tropasAntes/2);
+                System.out.println("Ahora el pais: " + atacante.getNombre() + " que tenia " + tropasAntes + " ahora tiene " + atacante.getNumTropas());
+            } else{
+                System.out.println("Los jugadores han quedado empate");
+                int tropasAntes = atacante.getNumTropas();
+                int tropasAhora = atacante.getNumTropas() * 2/3;
+                System.out.println("Ahora el pais: " + atacante.getNombre() + " que tenia " + tropasAntes + " ahora tiene " + tropasAhora);
+                System.out.println("Ahora el pais: " + defensor.getNombre() + " que tenia " + tropasAntes + " ahora tiene " + tropasAhora);
             }
-
-        }else{
-
         }
-
-
-
-
-
-
 
     }
 

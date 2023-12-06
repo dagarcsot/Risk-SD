@@ -2,7 +2,7 @@ import java.io.*;
 import java.util.*;
 
 
-public class Mapa {
+public class Mapa implements Serializable{
     private List<Pais> paises; //todos los paises del mapa
     private List<Continente> continentes; //todos los continentes del mapa
     private Map<String,Pais> mapPaises; // almacenar los paises en un mapa por nombre para tardar menos en buscar
@@ -84,7 +84,7 @@ public class Mapa {
         return this.mapPaises.get(nom).getNumTropas();
     }
 
-    public List<Pais> getPaisesLibres(){ //devuelve los paises que no tengan propietario //creo que no hace falta si asignamos aleatoriamente a los paises un propietario al principio.
+    public List<Pais> getPaisesLibres(){ //devuelve los paises que no tengan propietario
         List<Pais> libres = new ArrayList<>();
 
         for(Pais p : this.paises){
@@ -96,7 +96,7 @@ public class Mapa {
         return libres;
     }
 
-    public boolean conprobarFrontera(String pais1, String pais2){
+    public boolean sonFrontera(String pais1, String pais2){
         return mapPaises.get(pais1).getPaisesFrontera().contains(mapPaises.get(pais2));
     }
 
@@ -134,6 +134,36 @@ public class Mapa {
         }
         pais.setFronteras(front); //añadimos al pais sus paises fronteras
         this.fronteras.put(pais,front); //añadimos al mapa la relación del pais con sus fronteras
+    }
+
+    public String toString(){
+        int n = this.continentes.size();
+        String s = "";
+        for(int i = 0; i<n;i++){
+            s = s + this.continentes.get(i).toString();
+        }
+        return s;
+    }
+
+    public boolean quedanPaisesSinOcupar(){
+        int n = this.paises.size();
+        for(int i = 0;i<n;i++){
+            if(this.paises.get(i).getPropietario() == null){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean mapaConquistado(){
+        Jugador j = this.paises.get(0).getPropietario();
+        int n = this.paises.size();
+        for(int i = 0;i<n;i++){
+            if(!j.equals(this.paises.get(i).getPropietario())){
+                return false;
+            }
+        }
+        return true;
     }
 
 

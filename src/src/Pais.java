@@ -1,6 +1,7 @@
+import java.io.Serializable;
 import java.util.List;
 
-public class Pais {
+public class Pais implements Serializable {
     private String nombre;
     private int numTropas; //num tropas que tiene ese país
     private Jugador propietario; //jugador que tiene el país
@@ -39,6 +40,9 @@ public class Pais {
 
     public Jugador getPropietario() {
         return this.propietario;
+    }
+    public void setPropietario(Jugador j) {
+         this.propietario = j;
     }
 
     public boolean sonFrontera(Pais p) {

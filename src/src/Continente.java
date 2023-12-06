@@ -33,6 +33,17 @@ public class Continente {
         return this.paises;
     }
 
+    public boolean esConquistado(){
+        int n = this.paises.size();
+        Jugador j = this.paises.get(0).getPropietario();
+        for(int i = 1;i<n;i++){
+            if(this.paises.get(i).getPropietario() == j){
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public String toString() {
         String s = "Continente: " + this.nombre + "\n";
