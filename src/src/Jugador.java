@@ -185,4 +185,8 @@ public class Jugador {
         return numJugadores;
     }
 
+    public boolean isEliminado(){
+        return this.numTropas==0;
+    }
+
 }

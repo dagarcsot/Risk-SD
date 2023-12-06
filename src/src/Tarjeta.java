@@ -1,20 +1,15 @@
-public class Tarjeta {
+public final class Tarjeta {
 
-    private String pais;
-    private String tropa;
+    private final Pais pais;
+    private final String tropa;
 
-    public Tarjeta(){
-        this.pais="";
-        this.tropa="";
-    }
-
-    public Tarjeta(String territorio, String tropa){
-        this.pais=territorio;
+    public Tarjeta(Pais pais, String tropa){
+        this.pais=pais;
         this.tropa=tropa;
     }
 
-    public String getTerritorio(){
-        return this.pais;
+    public String getNombrePais(){
+        return this.pais.getNombre();
     }
 
     public String getTropa(){
@@ -23,7 +18,7 @@ public class Tarjeta {
 
     @Override
     public String toString() {
-        return "Pais: "+this.pais+"\n"+
+        return "Pais: "+this.pais.getNombre()+"\n"+
                 "Tropa: "+this.tropa+"\n";
     }
 }

@@ -1,5 +1,4 @@
 import java.io.*;
-import java.lang.management.PlatformLoggingMXBean;
 import java.util.*;
 
 
@@ -14,6 +13,8 @@ public class Mapa {
         this.paises = new ArrayList<>();
         this.continentes = new ArrayList<>();
         this.fronteras = new HashMap<>();
+        this.mapPaises = new HashMap<>();
+        this.mapContinentes = new HashMap<>();
 
         try (DataInputStream dis = new DataInputStream(new FileInputStream("paises.txt"));
              DataInputStream dis1 = new DataInputStream(new FileInputStream("continentes.txt"));
@@ -93,6 +94,10 @@ public class Mapa {
         }
 
         return libres;
+    }
+
+    public boolean conprobarFrontera(String pais1, String pais2){
+        return mapPaises.get(pais1).getPaisesFrontera().contains(mapPaises.get(pais2));
     }
 
 

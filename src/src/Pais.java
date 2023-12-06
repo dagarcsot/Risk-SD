@@ -41,7 +41,7 @@ public class Pais {
         return this.propietario;
     }
 
-    public boolean sonAdyacentes(Pais p) {
+    public boolean sonFrontera(Pais p) {
         return this.paisesFrontera.contains(p);
     }
 

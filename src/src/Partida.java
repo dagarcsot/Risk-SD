@@ -19,23 +19,15 @@ public class Partida {
 
         while(numTropas == 0) {
             switch (numJ) {
-                case 3:
-                    numTropas = 35;
-                    break;
-                case 4:
-                    numTropas = 30;
-                    break;
-                case 5:
-                    numTropas = 25;
-                    break;
-                case 6:
-                    numTropas = 20;
-                    break;
-                default:
+                case 3 -> numTropas = 35;
+                case 4 -> numTropas = 30;
+                case 5 -> numTropas = 25;
+                case 6 -> numTropas = 20;
+                default -> {
                     System.out.println("Número de jugadores incorrecto (3-6).");
                     System.out.println("Escribe el numero de jugadores (3-6)");
                     numJ = read.nextInt();
-
+                }
             }
         }
        jugadores = new ArrayList<>();
