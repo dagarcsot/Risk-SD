@@ -79,32 +79,44 @@ public class Jugador {
         return new ArrayList<>(this.continentesOcupados.values());
     }
 
+    public int comprobarContinentes(){
+        //devuelve 0 si no ocupa ningun continente, si no, devuelve la suma del valor de los continentes que ocupa
+        int suma = 0;
+        if(this.continentesOcupados.size() == 0){
+            return 0;
+        }
+        else {
+            for(int i=0; i<this.continentesOcupados.size();i++) {
+                suma = suma + this.getContinentes().get(i).getValor();
+            }
+            return suma;
+        }
+    }
+
     public void addTarjeta(Tarjeta t) {
-        if (this.manoTarjetas.getMano().size() < MAXTARJETAS) {
+        if (this.manoTarjetas.getTarjetas().size() < MAXTARJETAS) {
             this.manoTarjetas.addTarjeta(t);
         } else {
             System.out.println("¡Numero maximo de tarjetas alcanzado!");
             System.out.println("Si quieres quedarte la tarjeta debes eliminar una de las anteriores\n");
-            for (int j = 0; j < this.manoTarjetas.getMano().size(); j++) {
+            for (int j = 0; j < this.manoTarjetas.getTarjetas().size(); j++) {
                 System.out.println("Tarjeta: " + j);
-                System.out.println(this.manoTarjetas.getMano().get(j).toString() + "\n");
+                System.out.println(this.manoTarjetas.getTarjetas().get(j).toString() + "\n");
             }
             System.out.println("Introduce 0 si quieres quedarte con las tarjetas anteriores");
             System.out.println("Introduce 1 si quieres cambiar la tarjeta");
             Scanner entrada = new Scanner(System.in);
             int i = entrada.nextInt();
             switch (i) {
-                case 0:
-                    System.out.println("Tarjeta: " + t.toString() + " eliminada");
-                    break;
-                case 1:
+                case 0 -> System.out.println("Tarjeta: " + t.toString() + " eliminada");
+                case 1 -> {
                     System.out.println("¿Por que tarjeta la quieres cambiar?");
                     i = entrada.nextInt();
-                    this.manoTarjetas.getMano().remove(i);
+                    this.manoTarjetas.getTarjetas().remove(i);
                     this.addTarjeta(t);
                     System.out.println("¡Tarjeta: " + t.toString() + " añadida con exito!");
-                default:
-                    addTarjeta(t);
+                }
+                default -> addTarjeta(t);
             }
         }
     }
@@ -162,10 +174,10 @@ public class Jugador {
     }
 
     public void eliminarTarjeta(Tarjeta t) {
-        this.manoTarjetas.getMano().remove(t);
+        this.manoTarjetas.getTarjetas().remove(t);
     }
 
-    public ManoTarjetas getTarjetas() {
+    public ManoTarjetas getManoTarjetas() {
         return this.manoTarjetas;
     }
 

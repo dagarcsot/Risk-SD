@@ -100,7 +100,7 @@ public class Mapa implements Serializable{
     }
 
     public List<Tarjeta> getMazo(){
-        return this.mazo.getMano();
+        return this.mazo.getTarjetas();
     }
 
     public void setMazo(ManoTarjetas mazo) {

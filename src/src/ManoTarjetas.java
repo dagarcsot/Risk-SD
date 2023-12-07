@@ -54,7 +54,7 @@ public class ManoTarjetas {
         return this.mano.size() >= 5;
     }
 
-    public List<Tarjeta> getMano(){
+    public List<Tarjeta> getTarjetas(){
         return this.mano;
     }
 }

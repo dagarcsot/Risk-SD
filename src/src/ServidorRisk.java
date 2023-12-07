@@ -53,8 +53,10 @@ public class ServidorRisk {
                         //Incrementamos el numero de jugadores
                         numConexiones++;
 
-                        //Ejecutar el manejador e risk en el pool de hilos
-                        pool.submit(new ManejadorCliente(clienteRisk,jugador,numConexiones));
+                        //Ejecutar el manejador risk en el pool de hilos
+                        for (int i=0; i<jugadores.size(); i++){
+                            pool.submit(new ManejadorCliente(clienteRisk,jugadores.get(i),numConexiones));
+                        }
                     }
                 } catch (IOException e) {
                     e.printStackTrace();

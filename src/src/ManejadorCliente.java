@@ -20,8 +20,7 @@ public class ManejadorCliente implements Runnable{
     @Override
     public void run() {
         try (BufferedReader br = new BufferedReader(new InputStreamReader(this.cliente.getInputStream()));
-             PrintWriter pw = new PrintWriter(new OutputStreamWriter(this.cliente.getOutputStream()));
-             ){
+             PrintWriter pw = new PrintWriter(new OutputStreamWriter(this.cliente.getOutputStream()))){
 
 
             pw.println("Hola, "+this.jugador.getNombre()+". Eres la conexíón numero: "+this.numConexion);
