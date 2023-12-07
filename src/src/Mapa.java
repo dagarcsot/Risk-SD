@@ -8,6 +8,7 @@ public class Mapa implements Serializable{
     private Map<String,Pais> mapPaises; // almacenar los paises en un mapa por nombre para tardar menos en buscar
     private Map<String,Continente> mapContinentes; // almacenar los continentes en un mapa por nombre para tardar menos en buscar
     private Map<Pais,List<Pais>> fronteras;  //para cada nombre pais añadimos una lista con sus fronteras
+    private ManoTarjetas mazo;
 
     public Mapa(){
         this.paises = new ArrayList<>();
@@ -15,6 +16,11 @@ public class Mapa implements Serializable{
         this.fronteras = new HashMap<>();
         this.mapPaises = new HashMap<>();
         this.mapContinentes = new HashMap<>();
+        this.mazo = new ManoTarjetas();
+
+        //Variables para mazo
+        Random r = new Random();
+        String tropa = null;
 
         try (DataInputStream dis = new DataInputStream(new FileInputStream("paises.txt"));
              DataInputStream dis1 = new DataInputStream(new FileInputStream("continentes.txt"));
@@ -31,11 +37,20 @@ public class Mapa implements Serializable{
                 crearFronteras(linea);
             }
             for(Pais p:this.paises){
-                this.mapPaises.put(p.getNombre(),p);
+                this.mapPaises.put(p.getNombre(),p); //mapa paises
+
+                //Creamos el mazo de cartas con una carta por cada pais
+                switch (r.nextInt(3)) {
+                    case 0 -> tropa = "Infanteria";
+                    case 1 -> tropa = "Caballeria";
+                    case 2 -> tropa = "Artilleria";
+                }
+                this.mazo.addTarjeta(new Tarjeta(p,tropa));
             }
             for(Continente c:this.continentes){
                 this.mapContinentes.put(c.getNombre(),c);
             }
+
         } catch (IOException e){
             e.printStackTrace();
         }
@@ -82,6 +97,14 @@ public class Mapa implements Serializable{
 
     public int getTropas(String nom){ // devuelve el numero de tropas de un pais
         return this.mapPaises.get(nom).getNumTropas();
+    }
+
+    public List<Tarjeta> getMazo(){
+        return this.mazo.getMano();
+    }
+
+    public void setMazo(ManoTarjetas mazo) {
+        this.mazo = mazo;
     }
 
     public List<Pais> getPaisesLibres(){ //devuelve los paises que no tengan propietario

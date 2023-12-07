@@ -6,12 +6,15 @@ public class ManejadorCliente implements Runnable{
 
     private final Socket cliente;
     private final Jugador jugador;
+
+    private final int numConexion;
     private static Mapa mapa;
 
 
-    public ManejadorCliente(Socket s, Jugador j){
+    public ManejadorCliente(Socket s, Jugador j, int numConexion){
         this.cliente=s;
         this.jugador=j; //referencia al jugador asociado
+        this.numConexion=numConexion; //orden en el que va el juego
     }
 
     @Override
@@ -21,11 +24,7 @@ public class ManejadorCliente implements Runnable{
              ){
 
 
-            //Procesar mensajes de los clientes...
-            String entrada;
-            while ((entrada = br.readLine()) != null ){
-                System.out.println(jugador.getNombre() + ": "+entrada); //esto para que?
-            }
+            pw.println("Hola, "+this.jugador.getNombre()+". Eres la conexíón numero: "+this.numConexion);
 
             //implementar la logica del juego aqui
             if(mapa.quedanPaisesSinOcupar()){ //mientras que queden paises sin ocupar, los jugadores iran ocupandolos, poniendo una tropa en cada pais
@@ -42,6 +41,12 @@ public class ManejadorCliente implements Runnable{
 
         } catch (IOException e){
             e.printStackTrace();
+        } finally {
+            try {
+                this.cliente.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
     }

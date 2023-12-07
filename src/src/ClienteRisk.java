@@ -16,6 +16,7 @@ public class ClienteRisk {
             try (BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                  PrintWriter pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()))){
 
+                //Leemos y enviamos el nombre al servidor
                 System.out.println(br.readLine());
                 entrada = new Scanner(System.in);
                 String s = entrada.nextLine().trim();
@@ -38,6 +39,11 @@ public class ClienteRisk {
     }
 
     private static void elegirJugada(Jugador j){
+
+        ManoTarjetas manoTarjetas = new ManoTarjetas();
+
+        System.out.println("Turno de: "+j.getNombre());
+        //System.out.println("Recibe la siguiente tarjeta: "+);
         int opcion=0;
 
         do{

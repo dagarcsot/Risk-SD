@@ -8,42 +8,54 @@ import java.util.concurrent.*;
 
 public class ServidorRisk {
     private static final int puerto = 6666;
-    private static  List<Jugador> jugadores = new ArrayList<>(); //no puede ser final, la clase jugador tiene una lista con los paises ocupados que varian
-    private static final int numCores = Runtime.getRuntime().availableProcessors();
-    private static final ExecutorService pool = Executors.newFixedThreadPool(numCores);
+    private static  List<Jugador> jugadores = new ArrayList<>();
+
+    private static final int MIN_JUGADORES = 2;
+    private static final int MAX_JUGADORES = 6;
+    private static ExecutorService pool;
 
     private static Mapa mapa = new Mapa();
 
     public static void main(String[] args) {
         ServerSocket ss = null;
         try {
+            pool = Executors.newFixedThreadPool(MAX_JUGADORES);
+            int numConexiones = 0;
             ss = new ServerSocket(puerto);
             System.out.println("Esperando conexión de jugadores...\n");
 
             while (true) {
                 try {
+                    if(numConexiones < MIN_JUGADORES){
+                        //Espera hasta que se alcance el número mínimo de conexiones
+                        continue;
+                    }
                     Socket clienteRisk = ss.accept();
 
-                    System.out.println("Cliente conectado: " + clienteRisk); //que hace esto?
-
                     //Crear nuevo jugador añadirlo a la lista
-
                     BufferedReader br = new BufferedReader(new InputStreamReader(clienteRisk.getInputStream()));
                     PrintWriter pw = new PrintWriter(new OutputStreamWriter(clienteRisk.getOutputStream()));
                     ObjectInputStream ois = new ObjectInputStream(clienteRisk.getInputStream());
                     ObjectOutputStream oos = new ObjectOutputStream(clienteRisk.getOutputStream());
-
 
                     pw.println("Por favor, introduce tu nombre: ");
                     String nom = br.readLine();
                     Jugador jugador = new Jugador(nom.trim(), 0);
                     jugadores.add(jugador);
 
-                    //Crear nuevo manejador de cliente y asignarle el jugador
-                    ManejadorCliente manejadorCliente = new ManejadorCliente(clienteRisk, jugador);
+                    //Comprobamos que con el nuevo jugador no superamos el máximo
+                    if(numConexiones >= MAX_JUGADORES){
+                        //Si se alcanza el máximo la conexión es rechazada
+                        System.out.println("Límite de conexionnes alcanzada. Rechazando al cliente");
+                        clienteRisk.close();
+                        continue;
+                    } else {
+                        //Incrementamos el numero de jugadores
+                        numConexiones++;
 
-                    //Ejecutar el manejador e risk en el pool de hilos
-                    pool.execute(manejadorCliente);
+                        //Ejecutar el manejador e risk en el pool de hilos
+                        pool.submit(new ManejadorCliente(clienteRisk,jugador,numConexiones));
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -66,6 +78,5 @@ public class ServidorRisk {
     public void actualizarPartida(Mapa m, List<Jugador> j) {
         jugadores = j;
         mapa = m;
-
     }
 }
