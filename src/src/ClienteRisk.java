@@ -72,8 +72,9 @@ public class ClienteRisk {
 
                 do {
                     System.out.println("Introduzca con cual de sus paises desea atacar");
-                    for(int i=0; i<j.getPaisesOcupados().size(); i++){ //mostramos los paises que tiene el jugador
-                        System.out.println("0. "+j.getPaisesOcupados().get(i).getNombre());
+                    int n=j.getPaisesOcupados().size();
+                    for(int i=0;  i<n; i++){ //mostramos los paises que tiene el jugador
+                        System.out.println(i +". "+j.getPaisesOcupados().get(i).getNombre());
                     }
                     int pos = entrada.nextInt();
                     atacante = j.getPaisesOcupados().get(pos);

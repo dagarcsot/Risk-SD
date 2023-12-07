@@ -20,6 +20,7 @@ public class ManejadorCliente implements Runnable{
              PrintWriter pw = new PrintWriter(new OutputStreamWriter(this.cliente.getOutputStream()));
              ){
 
+
             //Procesar mensajes de los clientes...
             String entrada;
             while ((entrada = br.readLine()) != null ){
