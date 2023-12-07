@@ -98,7 +98,43 @@ public class ClienteRisk {
                 }
 
             }
-            case 2 -> System.out.println("fuck");
+            case 2 -> {
+                List<Pais> puedeMover = new ArrayList<>();
+                Pais envia = null;
+                do {
+                    System.out.println("Introduzca con cual de sus paises desea atacar");
+                    int n=jugador.getPaisesOcupados().size();
+                    for(int i=0;  i<n; i++){ //mostramos los paises que tiene el jugador
+                        System.out.println(i +". "+jugador.getPaisesOcupados().get(i).getNombre());
+                    }
+                    int pos = entrada.nextInt();
+                    envia = jugador.getPaisesOcupados().get(pos);
+
+                    if(!envia.puedeAtacar()){
+                        System.out.println("El pais elegido solo tiene una tropa, no puedes trasladar tropas de él. Elige otro.");
+                    } else {
+                        puedeMover = envia.paisesPuedeMover();
+                    }
+                } while (envia.puedeAtacar() && puedeMover.size()>0);
+                //comprobamos si el pais tiene mas de 1 tropa1 para enviar tropas y tiene un paises a los que enviar
+
+                System.out.println("Los paises a los que "+envia.getNombre()+" puede desplazar tropas son: ");
+                for(int i=0; i<puedeMover.size(); i++){ //mostramos los paises frontera de ese pais
+                    System.out.println(i + ". "+puedeMover.get(i).getNombre());
+                }
+                int pos = entrada.nextInt();
+                Pais recibe = puedeMover.get(pos);
+                int numTropasMAX = recibe.getNumTropas() -1;
+                int trop;
+                do{
+                    System.out.println("Elige el numero de tropas para enviar desde " + envia.getNombre() +" a " +recibe.getNombre() + ". Maximo " + numTropasMAX + " tropas.");
+                    trop = entrada.nextInt();
+                }while(trop>numTropasMAX);
+
+                envia.moverTropas(recibe,trop);
+
+
+            }
             case 3 -> {
                 Pais atacante = null;
                 List<Pais> puedeAtacar = new ArrayList<>();

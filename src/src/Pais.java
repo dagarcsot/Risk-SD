@@ -1,6 +1,7 @@
 import java.io.Serializable;
 import java.util.List;
 
+import java.util.*;
 public class Pais implements Serializable {
     private String nombre;
     private int numTropas; //num tropas que tiene ese país
@@ -65,4 +66,39 @@ public class Pais implements Serializable {
     public String toString() {
         return "Pais: " + this.nombre + ", Propietario: " + ((this.propietario != null) ? this.propietario.getNombre() : "No tiene propietario\n");
     }
+
+    public List<Pais> paisesPuedeMover(){
+        Set<Pais> visitados = new HashSet<>();
+        List<Pais> resultado = new ArrayList<>();
+
+        paisesPuedeMoverAux(this, visitados, resultado);
+
+        // Excluimos el propio país
+        resultado.remove(this);
+
+        return resultado;
+
+
+    }
+
+    private void paisesPuedeMoverAux(Pais origen, Set<Pais> visitados, List<Pais> resultado) {
+        visitados.add(origen);
+        resultado.add(origen);
+        int n = origen.paisesFrontera.size();
+        for (int i = 0;i<n;i++) {
+            Pais vecino = origen.paisesFrontera.get(i);
+            if (!visitados.contains(vecino) && vecino.propietario.equals(this.propietario)) {
+                paisesPuedeMoverAux(vecino, visitados, resultado);
+            }
+        }
+    }
+
+
+    public void moverTropas(Pais p,int numTropas){
+        //PRE: numTropas<this.getNumTropas()
+        this.setNumTropas(this.getNumTropas()-numTropas);
+        p.setNumTropas(p.getNumTropas()+numTropas);
+    }
+
+
 }
