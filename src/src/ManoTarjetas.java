@@ -35,7 +35,7 @@ public class ManoTarjetas {
     public int canjearTarjetas(int pos1, int pos2, int pos3){
         //si puede canjear devuelve el valor de las tropas, si no devuelve 0
         int valor = 0;
-        if(mano.size()>=3){
+        if(this.mano.size() >= 5){
             if(mano.get(pos1).getTropa().equals(mano.get(pos2).getTropa()) && mano.get(pos1).getTropa().equals(mano.get(pos3).getTropa())){
                 //las 3 cartas tienen la misma tropa
                 valor = 3;

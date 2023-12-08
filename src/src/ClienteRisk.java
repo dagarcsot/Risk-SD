@@ -16,7 +16,7 @@ public class ClienteRisk {
             try (BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                  PrintWriter pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
                  ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
-                 ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());){
+                 ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream())){
 
                 //Leemos y enviamos el nombre al servidor
                 System.out.println(br.readLine());
@@ -53,6 +53,8 @@ public class ClienteRisk {
             tropas = tropas + jugador.getContinentes().get(i).getValor();
         }
         System.out.println(jugador.getNombre()+" ha recibido un total de "+tropas+" tropas");
+        System.out.println("Selecciona el pais al que se añaden las tropas: ");
+        seleccionarPais(jugador,tropas);
 
         //Ahora recibe una tarjeta del mazo por empezar el turno
         if(mapa.getMazo().size()!=0){
@@ -93,35 +95,18 @@ public class ClienteRisk {
                     int canjea = jugador.getManoTarjetas().canjearTarjetas(pos1, pos2, pos3);
                     if (canjea != 0) {
                         System.out.println("Tarjetas canjeadas con exito, has recibido "+canjea+" tropas");
-
-
-                        int nu = 0;
-                        do{
-                            System.out.println("Selecciona el pais al que se añaden las tropas: ");
-                            for(int i = 0;i<jugador.getPaisesOcupados().size();i++){
-                                System.out.println(i + ". " + jugador.getPaisesOcupados().get(i).getNombre());
-                            }
-                            nu = entrada.nextInt();
-                        }while(nu<jugador.getPaisesOcupados().size());
-                        Pais p = jugador.getPaisesOcupados().get(nu);
-                        p.setNumTropas(p.getNumTropas() + canjea);
-                        jugador.actualizarNumtropas();
+                        jugador.mostrarPaises();
                     } else {
                         System.out.println("No se pueden canjear las tres tarjetas que has escogido...");
                     }
                 }
-
             }
             case 2 -> {
                 List<Pais> puedeMover = new ArrayList<>();
                 Pais envia = null;
                 do {
-                    System.out.println("Introduzca con cual de sus paises desea atacar");
-                    int n=jugador.getPaisesOcupados().size();
-                    for(int i=0;  i<n; i++){ //mostramos los paises que tiene el jugador
-                        System.out.println(i +". "+jugador.getPaisesOcupados().get(i).getNombre());
-                    }
-                    int pos = entrada.nextInt();
+                    System.out.println("Introduzca que pais desea reforzar");
+                    int pos = jugador.mostrarPaises();
                     envia = jugador.getPaisesOcupados().get(pos);
 
                     if(!envia.puedeAtacar()){
@@ -141,12 +126,12 @@ public class ClienteRisk {
                 int numTropasMAX = recibe.getNumTropas() -1;
                 int trop;
                 do{
-                    System.out.println("Elige el numero de tropas para enviar desde " + envia.getNombre() +" a " +recibe.getNombre() + ". Maximo " + numTropasMAX + " tropas.");
+                    System.out.println("Elige el numero de tropas para enviar desde " + envia.getNombre()
+                            +" a " +recibe.getNombre() + ". Maximo " + numTropasMAX + " tropas.");
                     trop = entrada.nextInt();
                 }while(trop>numTropasMAX);
 
                 envia.moverTropas(recibe,trop);
-
 
             }
             case 3 -> {
@@ -154,11 +139,7 @@ public class ClienteRisk {
                 List<Pais> puedeAtacar = new ArrayList<>();
                 do {
                     System.out.println("Introduzca con cual de sus paises desea atacar");
-                    int n = jugador.getPaisesOcupados().size();
-                    for (int i = 0; i < n; i++) { //mostramos los paises que tiene el jugador
-                        System.out.println(i + ". " + jugador.getPaisesOcupados().get(i).getNombre());
-                    }
-                    int pos = entrada.nextInt();
+                    int pos = jugador.mostrarPaises();
                     atacante = jugador.getPaisesOcupados().get(pos);
 
                     if (!atacante.puedeAtacar()) {
@@ -196,5 +177,12 @@ public class ClienteRisk {
                 elegirJugada(jugador,mapa);
             }
         }
+    }
+
+    public static void seleccionarPais(Jugador jugador, int numTropas){
+        int n = jugador.mostrarPaises();
+        Pais p = jugador.getPaisesOcupados().get(n);
+        p.setNumTropas(p.getNumTropas() + numTropas);
+        jugador.actualizarNumtropas();
     }
 }

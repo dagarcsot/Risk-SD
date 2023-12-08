@@ -35,10 +35,6 @@ public class Pais implements Serializable {
         return this.paisesFrontera;
     }
 
-    public void asignarPropietario(Jugador j) {
-        this.propietario = j;
-    }
-
     public Jugador getPropietario() {
         return this.propietario;
     }

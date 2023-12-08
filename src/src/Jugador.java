@@ -164,7 +164,6 @@ public class Jugador {
         }
         atacante.getPropietario().actualizarNumtropas();
         defensor.getPropietario().actualizarNumtropas();
-
     }
 
     public void eliminarTarjeta(Tarjeta t) {
@@ -185,10 +184,25 @@ public class Jugador {
 
     public void actualizarNumtropas(){
         int suma = 0;
-        for(int i=0;i<this.paisesOcupados.size();i++){
-            suma = suma + this.paisesOcupados.get(i).getNumTropas();
+        List<Pais> l = getPaisesOcupados();
+        for(int i=0;i<l.size();i++){
+            suma = suma + l.get(i).getNumTropas();
         }
         this.setNumTropas(suma);
+    }
+
+    public int mostrarPaises(){
+        //devuelve la posicion del pais
+        Scanner entrada = new Scanner(System.in);
+        int n = 0;
+        do{
+            for(int i = 0;i<this.getPaisesOcupados().size();i++){
+                System.out.println(i + ". " + this.getPaisesOcupados().get(i).getNombre());
+            }
+            n = entrada.nextInt();
+        }while(n>this.getPaisesOcupados().size() || n<0);
+
+        return n;
     }
 
 }

@@ -4,7 +4,6 @@ import java.util.List;
 public class Continente {
 
     private String nombre;
-    private int numPaises; //numero de Paises del continente
     private int valor; //numero de tropas que recibes por tener el pais completo
     private List<Pais> paises = new ArrayList<>(); //lista con los paises de cada continente
 
@@ -18,7 +17,7 @@ public class Continente {
     }
 
     public int getNumTerritorios() {
-        return this.numPaises;
+        return this.paises.size();
     }
 
     public int getValor() {
@@ -46,11 +45,12 @@ public class Continente {
 
     @Override
     public String toString() {
-        String s = "Continente: " + this.nombre + "\n";
-        for (int i = 0; i < this.numPaises; i++) {
-            s = this.paises.get(i).toString() + "\n";
+        StringBuilder s = new StringBuilder();
+        s.append("Continente: ").append(this.nombre).append("\n");
+        for (int i = 0; i < this.paises.size(); i++) {
+            s.append(this.paises.get(i).toString());
         }
-        s = s + "\n";
-        return s;
+        s.append("\n");
+        return s.toString();
     }
 }

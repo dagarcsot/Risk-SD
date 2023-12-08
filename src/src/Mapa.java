@@ -84,7 +84,7 @@ public class Mapa implements Serializable{
     }
 
     public void setJugador(String nom, Jugador j){ //asigna el jugador j al pais nom
-        this.mapPaises.get(nom).asignarPropietario(j);
+        this.mapPaises.get(nom).setPropietario(j);
     }
 
     public Jugador getJugador(String nom){ //devuelve el jugador del pais j
@@ -159,13 +159,13 @@ public class Mapa implements Serializable{
         this.fronteras.put(pais,front); //añadimos al mapa la relación del pais con sus fronteras
     }
 
-    public String toString(){
-        int n = this.continentes.size();
-        String s = "";
-        for(int i = 0; i<n;i++){
-            s = s + this.continentes.get(i).toString();
+    @Override
+    public String toString() {
+        StringBuilder s = new StringBuilder();
+        for(int i=0;i<this.continentes.size();i++){
+            s.append(this.continentes.get(i).toString());
         }
-        return s;
+        return s.toString();
     }
 
     public boolean quedanPaisesSinOcupar(){
@@ -188,6 +188,4 @@ public class Mapa implements Serializable{
         }
         return true;
     }
-
-
 }
