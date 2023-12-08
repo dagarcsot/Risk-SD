@@ -14,7 +14,7 @@ public class ServidorRisk {
     private static final int MAX_JUGADORES = 6;
     private static ExecutorService pool;
 
-    private static Mapa mapa = new Mapa();
+    private static Mapa mapa;
 
     public static void main(String[] args) {
         ServerSocket ss = null;
@@ -76,9 +76,4 @@ public class ServidorRisk {
         }
     }
 
-
-    public void actualizarPartida(Mapa m, List<Jugador> j) {
-        jugadores = j;
-        mapa = m;
-    }
 }

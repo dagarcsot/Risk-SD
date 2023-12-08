@@ -34,14 +34,8 @@ public class Jugador {
         return new ArrayList<Pais>(this.paisesOcupados.values());
     }
 
-    public void setNumTropas(int tropas, boolean b) { //tropas = numero de tropas a modificar
-        if (b) {                                       //b = si es cierto suma las tropas ganadas, si es falso las elimina
-            this.numTropas = this.numTropas + tropas;
-            System.out.println(this.nombre + " ha ganado " + tropas + " tropas. Total de tropas: " + this.numTropas);
-        } else {
-            this.numTropas = this.numTropas - tropas;
-            System.out.println(this.nombre + " ha perdido " + tropas + " tropas. Total de tropas: " + this.numTropas);
-        }
+    public void setNumTropas(int tropas) {
+            this.numTropas = tropas;
     }
 
     public void addPais(List<Pais> l) { //añadir una lista de paises
@@ -52,16 +46,12 @@ public class Jugador {
 
     public void addPais(Pais p) { //añadir un pais (en un ataque)
         this.paisesOcupados.put(p.getNombre(), p);
-        System.out.println(this.nombre + " ha ocupado " + p.getNombre());
     }
 
     public void eliminarPais(String nom) { //eliminar un pais (en un ataque)
         this.paisesOcupados.remove(nom);
     }
 
-    public List<Pais> getPaises() {
-        return new ArrayList<>(this.paisesOcupados.values());
-    }
 
     public Pais getPais(String nombre){
         return this.paisesOcupados.get(nombre);
@@ -154,24 +144,26 @@ public class Jugador {
             defensor.setPropietario(this);
             defensor.setNumTropas(1);
             atacante.setNumTropas(atacante.getNumTropas()-1);
-            System.out.println("Ahora el pais: " + defensor.getNombre() + " es propiedad de " + jugadorAtacante);
+            System.out.println("El pais: " + defensor.getNombre() + " es propiedad de " + jugadorAtacante);
             this.addPais(defensor);
         } else{
             if(puntosAtacante<puntosDefensor){
                 System.out.println("Gana el jugador: " + jugadorDefensor);
                 int tropasAntes = atacante.getNumTropas();
                 atacante.setNumTropas(tropasAntes/2);
-                System.out.println("Ahora el pais: " + atacante.getNombre() + " que tenia " + tropasAntes + " ahora tiene " + atacante.getNumTropas());
+                System.out.println("El pais: " + atacante.getNombre() + " que tenia " + tropasAntes + " ahora tiene " + atacante.getNumTropas());
             } else{
                 System.out.println("Los jugadores han quedado empate");
                 int tropasAntes = atacante.getNumTropas();
                 int tropasAhora = atacante.getNumTropas() * 2/3;
-                System.out.println("Ahora el pais: " + atacante.getNombre() + " que tenia " + tropasAntes + " ahora tiene " + tropasAhora);
-                System.out.println("Ahora el pais: " + defensor.getNombre() + " que tenia " + tropasAntes + " ahora tiene " + tropasAhora);
+                System.out.println("El pais: " + atacante.getNombre() + " que tenia " + tropasAntes + " ahora tiene " + tropasAhora);
+                System.out.println("El pais: " + defensor.getNombre() + " que tenia " + tropasAntes + " ahora tiene " + tropasAhora);
                 atacante.setNumTropas(tropasAhora);
                 defensor.setNumTropas(tropasAhora);
             }
         }
+        atacante.getPropietario().actualizarNumtropas();
+        defensor.getPropietario().actualizarNumtropas();
 
     }
 
@@ -189,6 +181,14 @@ public class Jugador {
 
     public boolean isEliminado(){
         return this.numTropas==0;
+    }
+
+    public void actualizarNumtropas(){
+        int suma = 0;
+        for(int i=0;i<this.paisesOcupados.size();i++){
+            suma = suma + this.paisesOcupados.get(i).getNumTropas();
+        }
+        this.setNumTropas(suma);
     }
 
 }
