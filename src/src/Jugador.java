@@ -168,6 +168,8 @@ public class Jugador {
                 int tropasAhora = atacante.getNumTropas() * 2/3;
                 System.out.println("Ahora el pais: " + atacante.getNombre() + " que tenia " + tropasAntes + " ahora tiene " + tropasAhora);
                 System.out.println("Ahora el pais: " + defensor.getNombre() + " que tenia " + tropasAntes + " ahora tiene " + tropasAhora);
+                atacante.setNumTropas(tropasAhora);
+                defensor.setNumTropas(tropasAhora);
             }
         }
 

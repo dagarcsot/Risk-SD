@@ -14,7 +14,9 @@ public class ClienteRisk {
 
             //Obtener nombre del jugador
             try (BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                 PrintWriter pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()))){
+                 PrintWriter pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
+                 ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
+                 ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());){
 
                 //Leemos y enviamos el nombre al servidor
                 System.out.println(br.readLine());
