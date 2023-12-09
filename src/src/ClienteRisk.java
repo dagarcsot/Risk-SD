@@ -95,7 +95,10 @@ public class ClienteRisk {
                     int canjea = jugador.getManoTarjetas().canjearTarjetas(pos1, pos2, pos3);
                     if (canjea != 0) {
                         System.out.println("Tarjetas canjeadas con exito, has recibido "+canjea+" tropas");
-                        jugador.mostrarPaises();
+                        System.out.println("Selecciona el pais al que se añaden las tropas: ");
+                        Pais p = jugador.getPaisesOcupados().get(jugador.mostrarPaises());
+                        p.setNumTropas(p.getNumTropas() + canjea);
+                        jugador.actualizarNumtropas();
                     } else {
                         System.out.println("No se pueden canjear las tres tarjetas que has escogido...");
                     }
