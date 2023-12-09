@@ -56,6 +56,7 @@ public class ServidorRisk {
                                 for (int i = 0; i < jugadores.size(); i++) {
                                     pool.execute(new ManejadorCliente(clienteRisk, jugadores.get(i), mapa));
                                 }
+                                partidaAcabada = mapa.mapaConquistado();
 
                                 //hay que modificar este bucle, esta mal (no cambiamos valor del while)
                                 //cambios
