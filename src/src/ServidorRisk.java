@@ -4,61 +4,77 @@ import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.*;
 
 public class ServidorRisk {
     private static final int puerto = 6666;
+    private static final int TIEMPO_ESPERA = 60000; //un minuto en milisegundos
     private static  List<Jugador> jugadores = new ArrayList<>();
-
+    private static ServerSocket ss;
+    private static boolean aceptarConexiones = true;
     private static final int MIN_JUGADORES = 2;
     private static final int MAX_JUGADORES = 6;
+    private static boolean partidaEmpezada = false;
+    private static boolean partidaAcabada = false;
     private static ExecutorService pool;
 
     private static Mapa mapa;
 
     public static void main(String[] args) {
-        ServerSocket ss = null;
         try {
             pool = Executors.newFixedThreadPool(MAX_JUGADORES);
-            int numConexiones = 0;
+            //a veces sobrarán hilos, no se como crearlo con el numero de jugadores real
             ss = new ServerSocket(puerto);
+            mapa = new Mapa(); //creamos un unico mapa para la partida
             System.out.println("Esperando conexión de jugadores...\n");
+            iniciarTemporizador(); //empezamos a aceptar conexiones
 
             while (true) {
                 try {
-                    if(numConexiones < MIN_JUGADORES){
-                        //Espera hasta que se alcance el número mínimo de conexiones
-                        continue;
-                    }
-                    Socket clienteRisk = ss.accept();
+                    if (aceptarConexiones && !partidaEmpezada && jugadores.size() < MAX_JUGADORES) {
+                        Socket clienteRisk = ss.accept(); //aceptamos al jugador
 
-                    //Crear nuevo jugador añadirlo a la lista
-                    BufferedReader br = new BufferedReader(new InputStreamReader(clienteRisk.getInputStream()));
-                    PrintWriter pw = new PrintWriter(new OutputStreamWriter(clienteRisk.getOutputStream()));
-                    ObjectInputStream ois = new ObjectInputStream(clienteRisk.getInputStream());
-                    ObjectOutputStream oos = new ObjectOutputStream(clienteRisk.getOutputStream());
+                        try(BufferedReader br = new BufferedReader(new InputStreamReader(clienteRisk.getInputStream()));
+                            PrintWriter pw = new PrintWriter(new OutputStreamWriter(clienteRisk.getOutputStream()));
+                            ObjectInputStream ois = new ObjectInputStream(clienteRisk.getInputStream());
+                            ObjectOutputStream oos = new ObjectOutputStream(clienteRisk.getOutputStream())){
 
-                    pw.println("Por favor, introduce tu nombre: ");
-                    String nom = br.readLine();
-                    Jugador jugador = new Jugador(nom.trim(), 0);
-                    jugadores.add(jugador);
+                            //Crear nuevo jugador añadirlo a la lista
+                            pw.println("Por favor, introduce tu nombre: ");
+                            String nom = br.readLine();
+                            Jugador jugador = new Jugador(nom.trim(), 0);
+                            jugadores.add(jugador);
 
-                    //Comprobamos que con el nuevo jugador no superamos el máximo
-                    if(numConexiones >= MAX_JUGADORES){
-                        //Si se alcanza el máximo la conexión es rechazada
-                        System.out.println("Límite de conexionnes alcanzada. Rechazando al cliente");
-                        clienteRisk.close();
-                        continue;
+                            while(!partidaAcabada){
+                                oos.writeObject(mapa);
+                                oos.writeObject(jugador);
+                                mapa = (Mapa) ois.readObject();
+
+                                //Ejecutar el manejador risk en el pool de hilos
+                                for (int i = 0; i < jugadores.size(); i++) {
+                                    pool.execute(new ManejadorCliente(clienteRisk, jugadores.get(i), mapa));
+                                }
+
+                                //hay que modificar este bucle, esta mal (no cambiamos valor del while)
+                            }
+                        } catch (ClassNotFoundException e) {
+                            e.printStackTrace();
+                        }
+
                     } else {
-                        //Incrementamos el numero de jugadores
-                        numConexiones++;
-
-                        //Ejecutar el manejador risk en el pool de hilos
-                        for (int i=0; i<jugadores.size(); i++){
-                            pool.submit(new ManejadorCliente(clienteRisk,jugadores.get(i),numConexiones));
+                        if (jugadores.size() >= MAX_JUGADORES) {
+                            System.out.println("Límite de conexionnes alcanzada. Rechazando al cliente");
+                        }
+                        if (partidaEmpezada) {
+                            System.out.println("La partida ya ha comenzado, no puedes unirte...");
+                        }
+                        if (!aceptarConexiones) {
+                            System.out.println("El tiempo para conectarse a la partida ha excedido, ya no puedes unirte...");
                         }
                     }
-                } catch (IOException e) {
+                } catch (IOException e){
                     e.printStackTrace();
                 }
             }
@@ -74,6 +90,21 @@ public class ServidorRisk {
                 e.printStackTrace();
             }
         }
+    }
+
+    private static void iniciarTemporizador(){
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                detenerAceptacionConexiones();
+            }
+        }, TIEMPO_ESPERA);
+    }
+
+    private static void detenerAceptacionConexiones(){
+        aceptarConexiones = false;
+        System.out.println("No se aceptarán más conexiones");
     }
 
 }

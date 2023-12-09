@@ -6,16 +6,13 @@ public class ManejadorCliente implements Runnable{
 
     private final Socket cliente;
     private final Jugador jugador;
-
-    private final int numConexion;
-    private static Mapa mapa;
+    private final Mapa mapa;
 
 
-    public ManejadorCliente(Socket s, Jugador j, int numConexion){
+    public ManejadorCliente(Socket s, Jugador j, Mapa mapa){
         this.cliente=s;
         this.jugador=j; //referencia al jugador asociado
-        mapa = new Mapa(); // iniciamos el mapa/tablero de la partida
-        this.numConexion=numConexion; //orden en el que va el juego
+        this.mapa = mapa; //pasamos el mapa con el que va a jugar
     }
 
     @Override
@@ -24,15 +21,18 @@ public class ManejadorCliente implements Runnable{
              PrintWriter pw = new PrintWriter(new OutputStreamWriter(this.cliente.getOutputStream()))){
 
             Scanner entrada = new Scanner(System.in);
-            pw.println("Hola, "+this.jugador.getNombre()+". Eres la conexíón numero: "+this.numConexion);
+            pw.println("Hola, "+this.jugador.getNombre());
 
             if(mapa.quedanPaisesSinOcupar()){
                 //mientras que queden paises sin ocupar, los jugadores iran ocupandolos, poniendo una tropa en cada pais
-                pw.println("Que pais quieres ocupar: "); //Mandamos cliente
                 int num = mapa.getPaisesLibres().size();
+
+                pw.println("Que pais quieres ocupar: "); //Mandamos cliente
+                pw.println(num); //Cliente
+
                 for(int i = 0;i<num;i++){
-                    System.out.println(i+". "+mapa.getPaisesLibres().get(i).toString());
-                    //se muestran los paises que no tienen dueño para que el jugador coloque una tropa en uno de ellos
+                    pw.println(i+". "+mapa.getPaisesLibres().get(i).toString());
+                    //mandas al cliente los paises que no tienen dueño para que el jugador coloque una tropa en uno de ellos
                 }
                 int opc = Integer.parseInt(br.readLine());
                 //Asignamos el pais al propietario y lo añadimos a su lista de paises
@@ -56,7 +56,6 @@ public class ManejadorCliente implements Runnable{
                 System.out.println("Ha ganado el jugador: " + mapa.getPaises().get(0).getPropietario().getNombre());
             }
 
-
         } catch (IOException e){
             e.printStackTrace();
         } finally {
@@ -67,9 +66,5 @@ public class ManejadorCliente implements Runnable{
             }
         }
 
-    }
-
-    public void actualizarPartida(Mapa m) {
-        mapa = m;
     }
 }
