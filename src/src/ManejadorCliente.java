@@ -50,7 +50,7 @@ public class ManejadorCliente implements Runnable{
                 //mientras que el mapa sea conquistado por un unico jugador la partida no acaba.
 
 
-
+                //sigo
 
             } else{
                 System.out.println("Ha ganado el jugador: " + mapa.getPaises().get(0).getPropietario().getNombre());

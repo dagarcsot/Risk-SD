@@ -58,6 +58,7 @@ public class ServidorRisk {
                                 }
 
                                 //hay que modificar este bucle, esta mal (no cambiamos valor del while)
+                                //cambios
                             }
                         } catch (ClassNotFoundException e) {
                             e.printStackTrace();
