@@ -1,37 +1,31 @@
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
+import java.util.concurrent.Callable;
 
-public class ManejadorEntrada implements Runnable{
+public class ManejadorEntrada implements Callable<Jugador> {
 
     private final Socket socket;
-    private final Jugador jugador;
 
-    public ManejadorEntrada(Socket s, Jugador j){
-        this.socket=s;
-        this.jugador=j;
+
+    public ManejadorEntrada(Socket s) {
+        this.socket = s;
     }
 
     @Override
-    public void run() {
+    public Jugador call() {
         try (PrintWriter pw = new PrintWriter(new OutputStreamWriter(this.socket.getOutputStream()));
-             Scanner entrada = new Scanner(System.in)){
+             BufferedReader br = new BufferedReader(new InputStreamReader(this.socket.getInputStream()))) {
 
-            //Manejar la entrada del usuario
-            while (true){
-                System.out.println("Es el turno de "+this.jugador.getNombre());
-                System.out.println("¿Que quiere hacer?");
-                String accion = entrada.nextLine();
+            pw.println("Por favor, introduce tu nombre: ");
+            String nombre = br.readLine();
+            System.out.println("Nombre del jugador: " + nombre);
+            return new Jugador(nombre,0);
 
-                //Enviamos el comando al servidor
-                pw.println(accion);
-
-            }
-
-        } catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
+            return null;
         }
+
     }
 }

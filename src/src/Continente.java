@@ -1,7 +1,8 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Continente {
+public class Continente implements Serializable {
 
     private String nombre;
     private int valor; //numero de tropas que recibes por tener el pais completo
