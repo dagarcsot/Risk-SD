@@ -198,7 +198,7 @@ public class Jugador implements Serializable {
         System.out.println(); //visual
         int n = 0;
         do{
-            for(int i = 0;i<this.getPaisesOcupados().size();i++){
+            for(int i = 0;i<this.getPaisesOcupados().size();i++){ //esto esta mal
                 System.out.println(i + ". " + this.getPaisesOcupados().get(i).toString());
             }
             n = entrada.nextInt();

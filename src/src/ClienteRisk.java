@@ -80,31 +80,7 @@ public class ClienteRisk {
         System.out.println("------------------------------------------------"); //Visual
         System.out.println("Turno de: "+jugador.getNombre());
 
-        //Vamos a gestionar el numero de tropas que recibe un jugador al principio de su turno
-        System.out.println("El jugador recibe 3 tropas por iniciar su turno");
-        int tropas = 3;
-        for(int i=0; i<jugador.getContinentes().size(); i++){
-            System.out.println("El jugador recibe "+jugador.getContinentes().get(i).getValor()+" por "+
-                    jugador.getContinentes().get(i).getNombre());
-            tropas = tropas + jugador.getContinentes().get(i).getValor();
-        }
-        System.out.println(jugador.getNombre()+" ha recibido un total de "+tropas+" tropas");
-        System.out.println(); //Espacio visual
 
-        System.out.println("Selecciona el pais al que se añaden las tropas: ");
-        seleccionarPais(jugador,tropas);
-        System.out.println();  //Visual
-
-        //Ahora recibe una tarjeta del mazo por empezar el turno
-        if(mapa.getMazo().size()!=0){
-            Tarjeta t = mapa.getMazo().get(0);
-            mapa.getMazo().remove(0);
-            System.out.println(jugador.getNombre()+" ha recibido la tarjeta: ");
-            System.out.println(t.toString());
-            jugador.addTarjeta(t);
-        } else {
-            System.out.println("No quedan tarjetas en el mazo...");
-        }
         int opcion=0;
 
         if(mapa.quedanPaisesSinOcupar()){
@@ -130,6 +106,33 @@ public class ClienteRisk {
             //Lo que no se hacer es lo get las tropas
         } else{
             while (!turnoAcabado){
+                //Vamos a gestionar el numero de tropas que recibe un jugador al principio de su turno
+                System.out.println("El jugador recibe 3 tropas por iniciar su turno");
+                int tropas = 3;
+                for(int i=0; i<jugador.getContinentes().size(); i++){
+                    System.out.println("El jugador recibe "+jugador.getContinentes().get(i).getValor()+" por "+
+                            jugador.getContinentes().get(i).getNombre());
+                    tropas = tropas + jugador.getContinentes().get(i).getValor();
+                }
+                System.out.println(jugador.getNombre()+" ha recibido un total de "+tropas+" tropas");
+                System.out.println(); //Espacio visual
+
+                System.out.println("Selecciona el pais al que se añaden las tropas: ");
+                seleccionarPais(jugador,tropas);
+                System.out.println();  //Visual
+
+                //Ahora recibe una tarjeta del mazo por empezar el turno
+                if(mapa.getMazo().size()!=0){
+                    Tarjeta t = mapa.getMazo().get(0);
+                    mapa.getMazo().remove(0);
+                    System.out.println(jugador.getNombre()+" ha recibido la tarjeta: ");
+                    System.out.println(t.toString());
+                    jugador.addTarjeta(t);
+                } else {
+                    System.out.println("No quedan tarjetas en el mazo...");
+                }
+
+
                 do{
                     System.out.println("Que jugada desea realizar: ");
                     System.out.println("1. Canjear tarjetas");

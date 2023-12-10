@@ -65,13 +65,14 @@ public class ServidorRisk {
                             while (!partidaAcabada){ //hay que mandar cada vez un jugador, lo pongo mal ahora
                                 //mandamos jugador y mapa
                                 for(int i=0;i<jugadores.size();i++){
-                                    oos.writeObject(jugadores.get(0));
+                                    oos.writeObject(jugadores.get(i));
                                     oos.writeObject(mapa);
                                     oos.flush();
                                     //nos quedamos esperando a que nos manden el mapa otra vez
                                     mapa = (Mapa) ois.readObject();
                                     if(mapa.mapaConquistado()){ //comprobamos si el mapa ha sido completado
                                         oos.writeBytes("Ha ganado el jugador "+mapa.getPaises().get(0).getPropietario().getNombre()+"\n");
+                                        oos.flush();
                                         oos.writeBytes("Partida finalizada \n");
                                         oos.flush();
                                         partidaAcabada = true;
