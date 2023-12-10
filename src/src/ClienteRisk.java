@@ -1,5 +1,7 @@
 import java.io.*;
+import java.net.InetAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -12,9 +14,10 @@ public class ClienteRisk {
     private static Mapa mapaNuevo;
     private static Jugador jugador;
 
-    public static void main(String[] args) {
-        try (Socket cliente = new Socket("localhost", puerto)) {
-            System.out.println("Conectado al servidor " + cliente.getLocalPort() + "\n");
+    public static void main(String[] args)  {
+        String ip = "localhost";//hay que poner la ip del ordenador que haga el servidor
+        try (Socket cliente = new Socket(ip, puerto)) {
+            System.out.println("Conectado al servidor en el puerto " + cliente.getLocalPort() + "\n");
 
             // Obtener nombre del jugador
             try (ObjectOutputStream oos = new ObjectOutputStream(cliente.getOutputStream());
@@ -39,10 +42,11 @@ public class ClienteRisk {
                         if(mapaNuevo.mapaConquistado()){ //Comprobamos si hemos ganado
                             System.out.println("Has ganado la partida!!!");
                             partidaAcabada = true;
+                        } else {
+                            //enviamos el nuevo mapa
+                            oos.writeObject(mapaNuevo);
+                            oos.flush();
                         }
-                        //enviamos el nuevo mapa
-                        oos.writeObject(mapaNuevo);
-                        oos.flush();
                     } else { // si no esperamos
                         System.out.println("No es tu turno, te toca esperar...");
                         System.out.println("Te avisaremos cuando acabe el turno de "+jugador.getNombre());
@@ -89,7 +93,7 @@ public class ClienteRisk {
             System.out.println("Que pais quieres ocupar: "); //Mandamos cliente
 
             for(int i = 0;i<num;i++){
-                System.out.println(i+". "+mapa.getPaisesLibres().get(i).toString());
+                System.out.print(i+". "+mapa.getPaisesLibres().get(i).toString());
                 //mandas al cliente los paises que no tienen dueño para que el jugador coloque una tropa en uno de ellos
             }
             int opc = Integer.parseInt(entrada.nextLine());

@@ -14,7 +14,8 @@ public class ServidorRisk {
     private static final int puerto = 6666;
     private static final int TIEMPO_ESPERA = 60000; // un minuto en milisegundos
     private static final List<Jugador> jugadores = new ArrayList<>();
-    private static boolean aceptarConexiones = true;
+    private static volatile boolean aceptarConexiones = true;
+    private static int numConexiones;
     private static final int MIN_JUGADORES = 1;
     private static final int MAX_JUGADORES = 6;
     private static boolean partidaEmpezada = false;
@@ -23,17 +24,19 @@ public class ServidorRisk {
 
     public static void main(String[] args) {
         ServerSocket ss = null;
+        numConexiones = 0;
         try {
             ss = new ServerSocket(puerto);
             mapa = new Mapa(); // creamos un único mapa para la partida
             System.out.println("Esperando conexión de jugadores...\n");
-            //iniciarTemporizador(); // empezamos a aceptar conexiones
+            iniciarTemporizador(); // empezamos a aceptar conexiones
 
 
-            while (true) {
+            while ((numConexiones>MIN_JUGADORES && numConexiones<MAX_JUGADORES) || aceptarConexiones) {
                 try {
                     if (aceptarConexiones && !partidaEmpezada && jugadores.size() < MAX_JUGADORES) {
                         Socket clienteRisk = ss.accept(); // aceptamos al jugador
+
 
                         try (ObjectOutputStream oos = new ObjectOutputStream(clienteRisk.getOutputStream());
                              ObjectInputStream ois = new ObjectInputStream(clienteRisk.getInputStream())){
@@ -49,22 +52,15 @@ public class ServidorRisk {
 
                             oos.writeBytes("Esperamos 1 minuto a que se conecten el resto de jugadores \n");
                             oos.flush();
+                            while (aceptarConexiones) {
+                                Thread.onSpinWait(); //esperamos 1 min a que se conecten jugadores
+                            }
 
-
-                            new Thread(() -> {
-                                try {
-                                    Thread.sleep(TIEMPO_ESPERA);
-                                    detenerAceptacionConexiones();
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-                            }).start();
-
-                            esperarHastaDetener();
-
+                            int i;
                             while (!partidaAcabada){ //hay que mandar cada vez un jugador, lo pongo mal ahora
                                 //mandamos jugador y mapa
-                                for(int i=0;i<jugadores.size();i++){
+                                i=0;
+                                while(i<jugadores.size() && !partidaAcabada){
                                     oos.writeObject(jugadores.get(i));
                                     oos.writeObject(mapa);
                                     oos.flush();
@@ -77,8 +73,8 @@ public class ServidorRisk {
                                         oos.flush();
                                         partidaAcabada = true;
                                     }
+                                    i++;
                                 }
-
                             }
 
                         } catch (ClassNotFoundException e) {
@@ -115,24 +111,14 @@ public class ServidorRisk {
         }
     }
 
-    private static void iniciarTemporizador() { //no hace falta
-        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-        scheduler.schedule(new TimerTask() {
+    private static void iniciarTemporizador() {
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
             @Override
             public void run() {
                 detenerAceptacionConexiones();
             }
-        }, TIEMPO_ESPERA, TimeUnit.MILLISECONDS);
-    }
-
-    private static void esperarHastaDetener() {
-        while (!aceptarConexiones) {
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+        }, TIEMPO_ESPERA);
     }
 
     private static void detenerAceptacionConexiones() {
