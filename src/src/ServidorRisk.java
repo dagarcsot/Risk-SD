@@ -61,6 +61,7 @@ public class ServidorRisk {
                                 //hay que modificar este bucle, esta mal (no cambiamos valor del while)
                                 //cambios
                             }
+                            System.out.println("Ha ganado el jugador " + mapa.getPaises().get(0).getPropietario().getNombre());
                         } catch (ClassNotFoundException e) {
                             e.printStackTrace();
                         }
