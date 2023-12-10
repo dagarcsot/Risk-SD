@@ -212,8 +212,6 @@ public class ClienteRisk {
 
         }
 
-
-
         return mapa;
         //al acabar devolvemos el mapa modificado para enviarselo al servidor y que se lo mande al otro cliente
     }

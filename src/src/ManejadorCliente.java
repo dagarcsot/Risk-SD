@@ -21,11 +21,9 @@ public class ManejadorCliente implements Runnable {
              ObjectInputStream ois = new ObjectInputStream(this.cliente.getInputStream());
              ObjectOutputStream oos = new ObjectOutputStream(this.cliente.getOutputStream())) {
 
-            Scanner entrada = new Scanner(System.in);
+
             pw.println("Tu turno: " + this.jugador.getNombre());
 
-
-            //mientras que el mapa sea conquistado por un unico jugador la partida no acaba.
             oos.writeObject(mapa);// envio el mapa al jugador
             mapa = (Mapa) ois.readObject();// leemos el mapa modificado
 

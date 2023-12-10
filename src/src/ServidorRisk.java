@@ -2,6 +2,7 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -42,6 +43,7 @@ public class ServidorRisk {
                             ObjectOutputStream oos = new ObjectOutputStream(clienteRisk.getOutputStream())){
 
                             //Crear nuevo jugador añadirlo a la lista
+                            System.out.println("HOLA");
                             pw.println("Por favor, introduce tu nombre: ");
                             String nom = br.readLine();
                             Jugador jugador = new Jugador(nom.trim(), 0);
