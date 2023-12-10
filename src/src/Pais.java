@@ -60,35 +60,9 @@ public class Pais implements Serializable {
 
     @Override
     public String toString() {
-        return "Pais: " + this.nombre + ", Propietario: " + ((this.propietario != null) ? this.propietario.getNombre() : "No tiene propietario\n");
+        return "Pais: " + this.nombre  + ", Num tropas: "+this.numTropas + ", Propietario: " +
+                ((this.propietario != null) ? this.propietario.getNombre() : "No tiene propietario\n");
     }
-
-    public List<Pais> paisesPuedeMover(){
-        Set<Pais> visitados = new HashSet<>();
-        List<Pais> resultado = new ArrayList<>();
-
-        paisesPuedeMoverAux(this, visitados, resultado);
-
-        // Excluimos el propio país
-        resultado.remove(this);
-
-        return resultado;
-
-
-    }
-
-    private void paisesPuedeMoverAux(Pais origen, Set<Pais> visitados, List<Pais> resultado) {
-        visitados.add(origen);
-        resultado.add(origen);
-        int n = origen.paisesFrontera.size();
-        for (int i = 0;i<n;i++) {
-            Pais vecino = origen.paisesFrontera.get(i);
-            if (!visitados.contains(vecino) && vecino.propietario.equals(this.propietario)) {
-                paisesPuedeMoverAux(vecino, visitados, resultado);
-            }
-        }
-    }
-
 
     public void moverTropas(Pais p,int numTropas){
         //PRE: numTropas<this.getNumTropas()

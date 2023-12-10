@@ -1,46 +1,76 @@
-import java.io.*;
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class ClienteRisk {
-    private static final int puerto = 6666;
-    private static Scanner entrada = new Scanner(System.in);
+public class Prueba {
     private static boolean partidaAcabada = false;
+    private static Scanner entrada = new Scanner(System.in);
 
     public static void main(String[] args) {
-        try (Socket socket = new Socket("localhost",puerto)){
-            System.out.println("Conectado al servidor\n");
+        Jugador j1 = new Jugador("dani",0);
+        Jugador j2 = new Jugador("Ivan",0);
+        Jugador j3 = new Jugador("Perez",0);
+        List<Jugador> jugadores = new ArrayList<>();
+        jugadores.add(j1);
+        jugadores.add(j2);
+        jugadores.add(j3);
+        Mapa mapa = new Mapa();
 
-            //Obtener nombre del jugador
-            try (BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                 PrintWriter pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
-                 ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
-                 ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream())){
-
-                //Leemos y enviamos el nombre al servidor
-                System.out.println(br.readLine());
-                entrada = new Scanner(System.in);
-                String s = entrada.nextLine().trim();
-                pw.println(s);
-
-                while (!partidaAcabada){
-                    //Manejar la salida del servidor
-                    Mapa mapa = (Mapa) ois.readObject(); //nos dan mapa
-                    Jugador jugador = (Jugador) ois.readObject(); //nos dan jugador que modifica el mapa
-                    oos.writeObject(elegirJugada(jugador, mapa)); //elegimos opcion
-
-                    //hay que modificar este bucle, esta mal (no cambiamos valor del while)
-                    //cambios
+        /* Para completar 1 a 1
+        while(mapa.quedanPaisesSinOcupar()){
+            for(Jugador j : jugadores) {
+                if (mapa.quedanPaisesSinOcupar()) {
+                    System.out.println("Turno de: "+j.getNombre());
+                    for(int i=0; i<mapa.getPaisesLibres().size();i++){
+                        System.out.print(mapa.getPaisesLibres().get(i).toString());
+                    }
+                    System.out.println();
+                    System.out.println("Indica la posicion del pais que quieres ocupar: ");
+                    int i = Integer.parseInt(entrada.nextLine());
+                    //añadimos y asignamos propietario (para que no salga en la lista de paises libres)
+                    j.addPais(mapa.getPaisesLibres().get(i));
+                    mapa.getPaisesLibres().get(i).setPropietario(j);
+                } else {
+                    System.out.println("no quedan paises");
                 }
-
-            } catch (IOException | ClassNotFoundException e ){
-                e.printStackTrace();
             }
-        } catch (IOException e){
-            e.printStackTrace();
         }
+        for (Jugador j: jugadores){ //mostramos lo que ha añadido cada uno
+            System.out.println(j.getNombre()+" tine:");
+            for(int n=0; n<j.getPaisesOcupados().size();n++){
+                System.out.println(j.getPaisesOcupados().get(n));
+            }
+        }
+         */
+
+        //Para autocompletar
+        while(mapa.quedanPaisesSinOcupar()){
+            for(Jugador j : jugadores){
+                if(mapa.quedanPaisesSinOcupar()){
+                    j.addPais(mapa.getPaisesLibres().get(0)); //añadimos pais
+                    mapa.getPaisesLibres().get(0).setNumTropas(1); //le añadimos la tropa que le hemos puesto
+                    mapa.getPaisesLibres().get(0).setPropietario(j); // le asignamos el propietario
+                    j.actualizarNumtropas(); //actualizamos las tropas del jugador
+                }
+            }
+        }
+        for (Jugador j: jugadores){
+            System.out.println(j.getNombre()+" tine "+j.getNumTropas()+" tropas y "+j.getPaisesOcupados().size()+" paises:");
+            for(int n=0; n<j.getPaisesOcupados().size();n++){
+                System.out.println(j.getPaisesOcupados().get(n));
+            }
+            System.out.println();
+        }
+
+        while(!mapa.mapaConquistado()){
+            for(int i=0; i<jugadores.size(); i++){
+                if(!mapa.mapaConquistado()){
+                    elegirJugada(jugadores.get(i),mapa);
+                }
+            }
+        }
+
+
     }
 
     private static Mapa elegirJugada(Jugador jugador, Mapa mapa){

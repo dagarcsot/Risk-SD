@@ -48,7 +48,7 @@ public class Continente {
         StringBuilder s = new StringBuilder();
         s.append("Continente: ").append(this.nombre).append("\n");
         for (int i = 0; i < this.paises.size(); i++) {
-            s.append(this.paises.get(i).toString());
+            s.append(this.paises.get(i).toString()).append("\n");
         }
         s.append("\n");
         return s.toString();

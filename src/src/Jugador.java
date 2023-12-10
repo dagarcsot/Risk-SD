@@ -44,7 +44,7 @@ public class Jugador {
         }
     }
 
-    public void addPais(Pais p) { //añadir un pais (en un ataque)
+    public void addPais(Pais p) { //añadir un pais
         this.paisesOcupados.put(p.getNombre(), p);
     }
 
@@ -129,11 +129,11 @@ public class Jugador {
         int numDadosDefensor = 2;
 
         System.out.println(atacante.getNombre() + " (" + jugadorAtacante + ") ataca a " + defensor.getNombre() + " (" + jugadorDefensor + ").");
-        System.out.println("El atacante" + "tirará " + numDadosAtacante + " dados.");
-        System.out.println("El defensor" + "tirará " + numDadosDefensor + " dados.");
+        System.out.println("El atacante" + " tirará " + numDadosAtacante + " dados.");
+        System.out.println("El defensor" + " tirará " + numDadosDefensor + " dados.");
 
         System.out.println("El atacante tira los dados: [pulsa ENTER]");
-        read.nextInt();
+        read.nextLine(); //antes se leia un entero y no iba bien
         int puntosAtacante = dado.tirarDados(3);
         int puntosDefensor = dado.tirarDados(2);
         System.out.println("El atacante ha sacado: " + puntosAtacante);
@@ -194,10 +194,11 @@ public class Jugador {
     public int mostrarPaises(){
         //devuelve la posicion del pais
         Scanner entrada = new Scanner(System.in);
+        System.out.println(); //visual
         int n = 0;
         do{
             for(int i = 0;i<this.getPaisesOcupados().size();i++){
-                System.out.println(i + ". " + this.getPaisesOcupados().get(i).getNombre());
+                System.out.println(i + ". " + this.getPaisesOcupados().get(i).toString());
             }
             n = entrada.nextInt();
         }while(n>this.getPaisesOcupados().size() || n<0);
