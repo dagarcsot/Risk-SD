@@ -8,40 +8,61 @@ public class ClienteRisk {
     private static final int puerto = 6666;
     private static Scanner entrada = new Scanner(System.in);
     private static boolean partidaAcabada = false;
+    private static Mapa mapaViejo;
+    private static Mapa mapaNuevo;
+    private static Jugador jugador;
 
     public static void main(String[] args) {
-        try (Socket socket = new Socket("localhost",puerto)){
-            System.out.println("Conectado al servidor\n");
+        try (Socket cliente = new Socket("localhost", puerto)) {
+            System.out.println("Conectado al servidor " + cliente.getLocalPort() + "\n");
 
-            //Obtener nombre del jugador
-            try (BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                 PrintWriter pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
-                 ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
-                 ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream())){
+            // Obtener nombre del jugador
+            try (ObjectOutputStream oos = new ObjectOutputStream(cliente.getOutputStream());
+                 ObjectInputStream ois = new ObjectInputStream(cliente.getInputStream())) {
 
-                //Leemos y enviamos el nombre al servidor
-                System.out.println(br.readLine());
-                entrada = new Scanner(System.in);
-                String s = entrada.nextLine().trim();
-                pw.println(s);
+                //recibimos pregunta
+                System.out.println(ois.readLine());
+                //mandamos nombre
+                String nombre = entrada.nextLine().trim();
+                oos.writeBytes(nombre+"\n");
+                oos.flush();
 
-                while (!partidaAcabada){
-                    //Manejar la salida del servidor
-                    Mapa mapa = (Mapa) ois.readObject(); //nos dan mapa
-                    Jugador jugador = (Jugador) ois.readObject(); //nos dan jugador que modifica el mapa
-                    oos.writeObject(elegirJugada(jugador, mapa)); //elegimos opcion
+                //aviso de espera
+                System.out.println(ois.readLine());
 
-                    //hay que modificar este bucle, esta mal (no cambiamos valor del while)
-                    //cambios
+                while(!partidaAcabada){
+                    jugador = (Jugador) ois.readObject();
+                    mapaViejo = (Mapa) ois.readObject();
+                    if(jugador.getNombre().equals(nombre)){ //si coincide el nombre del jugador que mandan nos toca
+                        //modificamos el mapa
+                        mapaNuevo = elegirJugada(jugador,mapaViejo);
+                        if(mapaNuevo.mapaConquistado()){ //Comprobamos si hemos ganado
+                            System.out.println("Has ganado la partida!!!");
+                            partidaAcabada = true;
+                        }
+                        //enviamos el nuevo mapa
+                        oos.writeObject(mapaNuevo);
+                        oos.flush();
+                    } else { // si no esperamos
+                        System.out.println("No es tu turno, te toca esperar...");
+                        System.out.println("Te avisaremos cuando acabe el turno de "+jugador.getNombre());
+                    }
                 }
 
-            } catch (IOException | ClassNotFoundException e ){
+                //Recibimos el ganador
+                System.out.println(ois.readLine());
+                System.out.println(ois.readLine());
+
+
+            } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
-        } catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+
 
     private static Mapa elegirJugada(Jugador jugador, Mapa mapa){
         //Al final de cada turno se devuelve el mapa modificado

@@ -1,8 +1,9 @@
+import java.io.Serializable;
 import java.util.*;
 
 import static java.util.Arrays.stream;
 
-public class Jugador {
+public class Jugador implements Serializable {
 
     private String nombre;
     private int numTropas; //numero de tropas que tiene el jugador en el mapa

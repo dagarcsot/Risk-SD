@@ -1,8 +1,9 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class ManoTarjetas {
+public class ManoTarjetas implements Serializable {
 
     private List<Tarjeta> mano;
 

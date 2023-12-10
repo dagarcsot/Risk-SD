@@ -1,76 +1,75 @@
-import java.io.*;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
-import java.sql.SQLOutput;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.*;
+import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ServidorRisk {
     private static final int puerto = 6666;
-    private static final int TIEMPO_ESPERA = 60000; //un minuto en milisegundos
-    private static  List<Jugador> jugadores = new ArrayList<>();
-    private static ServerSocket ss;
+    private static final int TIEMPO_ESPERA = 60000; // un minuto en milisegundos
+    private static final List<Jugador> jugadores = new ArrayList<>();
     private static boolean aceptarConexiones = true;
-    private static final int MIN_JUGADORES = 2;
+    private static final int MIN_JUGADORES = 1;
     private static final int MAX_JUGADORES = 6;
     private static boolean partidaEmpezada = false;
     private static boolean partidaAcabada = false;
-    private static ExecutorService pool;
-
     private static Mapa mapa;
 
     public static void main(String[] args) {
+        ServerSocket ss = null;
         try {
-            pool = Executors.newFixedThreadPool(MAX_JUGADORES);
-            //a veces sobrarán hilos, no se como crearlo con el numero de jugadores real
             ss = new ServerSocket(puerto);
-            mapa = new Mapa(); //creamos un unico mapa para la partida
+            mapa = new Mapa(); // creamos un único mapa para la partida
             System.out.println("Esperando conexión de jugadores...\n");
-            iniciarTemporizador(); //empezamos a aceptar conexiones
+            iniciarTemporizador(); // empezamos a aceptar conexiones
 
             while (true) {
                 try {
                     if (aceptarConexiones && !partidaEmpezada && jugadores.size() < MAX_JUGADORES) {
-                        Socket clienteRisk = ss.accept(); //aceptamos al jugador
+                        Socket clienteRisk = ss.accept(); // aceptamos al jugador
 
-                        try(BufferedReader br = new BufferedReader(new InputStreamReader(clienteRisk.getInputStream()));
-                            PrintWriter pw = new PrintWriter(new OutputStreamWriter(clienteRisk.getOutputStream()));
-                            ObjectInputStream ois = new ObjectInputStream(clienteRisk.getInputStream());
-                            ObjectOutputStream oos = new ObjectOutputStream(clienteRisk.getOutputStream())){
+                        try (ObjectOutputStream oos = new ObjectOutputStream(clienteRisk.getOutputStream());
+                             ObjectInputStream ois = new ObjectInputStream(clienteRisk.getInputStream())){
 
-                            //Crear nuevo jugador añadirlo a la lista
-                            System.out.println("HOLA");
-                            pw.println("Por favor, introduce tu nombre: ");
-                            String nom = br.readLine();
-                            Jugador jugador = new Jugador(nom.trim(), 0);
+                            //mandamos pregunta
+                            oos.writeBytes("Hola jugador, como te llamas? \n");
+                            oos.flush();
+                            //recibimos nombre y creamos jugador
+                            String nombre = ois.readLine();
+                            Jugador jugador = new Jugador(nombre,0);
+                            //lo añadimos a la partida
                             jugadores.add(jugador);
 
-                            while(!partidaAcabada){
-                                oos.writeObject(mapa);
-                                oos.writeObject(jugador);
-                                mapa = (Mapa) ois.readObject();
+                            oos.writeBytes("Esperamos 1 minuto a que se conecten el resto de jugadores \n");
+                            oos.flush();
+                            while (aceptarConexiones){ //esperamos 1 min a que se conecten jugadores
 
-                                //Ejecutar el manejador risk en el pool de hilos
-                                for (int i = 0; i < jugadores.size(); i++) {
-                                    pool.execute(new ManejadorCliente(clienteRisk, jugadores.get(i), mapa));
-                                }
-                                partidaAcabada = mapa.mapaConquistado();
-
-                                //hay que modificar este bucle, esta mal (no cambiamos valor del while)
-                                //cambios
                             }
-                            System.out.println("Ha ganado el jugador " + mapa.getPaises().get(0).getPropietario().getNombre());
+
+                            while (!partidaAcabada){ //hay que mandar cada vez un jugador, lo pongo mal ahora
+                                //mandamos jugador y mapa
+                                oos.writeObject(jugadores.get(0));
+                                oos.writeObject(mapa);
+                                oos.flush();
+                                //nos quedamos esperando a que nos manden el mapa otra vez
+                                mapa = (Mapa) ois.readObject();
+                                if(mapa.mapaConquistado()){ //comprobamos si el mapa ha sido completado
+                                    oos.writeBytes("Ha ganado el jugador "+mapa.getPaises().get(0).getPropietario().getNombre()+"\n");
+                                    oos.writeBytes("Partida finalizada \n");
+                                    oos.flush();
+                                }
+                            }
+
                         } catch (ClassNotFoundException e) {
                             e.printStackTrace();
                         }
-
                     } else {
                         if (jugadores.size() >= MAX_JUGADORES) {
-                            System.out.println("Límite de conexionnes alcanzada. Rechazando al cliente");
+                            System.out.println("Límite de conexiones alcanzado. Rechazando al cliente");
                         }
                         if (partidaEmpezada) {
                             System.out.println("La partida ya ha comenzado, no puedes unirte...");
@@ -79,7 +78,10 @@ public class ServidorRisk {
                             System.out.println("El tiempo para conectarse a la partida ha excedido, ya no puedes unirte...");
                         }
                     }
-                } catch (IOException e){
+                } catch (SocketTimeoutException e) {
+                    // Manejar la excepción de tiempo de espera
+                    System.out.println("Tiempo de espera para conexiones agotado.");
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
@@ -87,7 +89,6 @@ public class ServidorRisk {
             e.printStackTrace();
         } finally {
             try {
-                pool.shutdown();
                 if (ss != null) {
                     ss.close();
                 }
@@ -97,7 +98,7 @@ public class ServidorRisk {
         }
     }
 
-    private static void iniciarTemporizador(){
+    private static void iniciarTemporizador() {
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
@@ -107,9 +108,8 @@ public class ServidorRisk {
         }, TIEMPO_ESPERA);
     }
 
-    private static void detenerAceptacionConexiones(){
+    private static void detenerAceptacionConexiones() {
         aceptarConexiones = false;
         System.out.println("No se aceptarán más conexiones");
     }
-
 }

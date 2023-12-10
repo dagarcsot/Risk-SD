@@ -1,4 +1,6 @@
-public final class Tarjeta {
+import java.io.Serializable;
+
+public final class Tarjeta implements Serializable {
 
     private final Pais pais;
     private final String tropa;
