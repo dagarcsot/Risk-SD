@@ -8,9 +8,7 @@ public final class Tarjeta {
         this.tropa=tropa;
     }
 
-    public String getNombrePais(){
-        return this.pais.getNombre();
-    }
+    public String getNombrePais(){return this.pais.getNombre();}
 
     public String getTropa(){
         return this.tropa;

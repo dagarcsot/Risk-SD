@@ -25,30 +25,7 @@ public class ManejadorCliente implements Runnable{
             Scanner entrada = new Scanner(System.in);
             pw.println("Hola, "+this.jugador.getNombre());
 
-            if(mapa.quedanPaisesSinOcupar()){
-                //mientras que queden paises sin ocupar, los jugadores iran ocupandolos, poniendo una tropa en cada pais
-                int num = mapa.getPaisesLibres().size();
-
-                pw.println("Que pais quieres ocupar: "); //Mandamos cliente
-                pw.println(num); //Cliente
-
-                for(int i = 0;i<num;i++){
-                    pw.println(i+". "+mapa.getPaisesLibres().get(i).toString());
-                    //mandas al cliente los paises que no tienen dueño para que el jugador coloque una tropa en uno de ellos
-                }
-                int opc = Integer.parseInt(br.readLine());
-                //Asignamos el pais al propietario y lo añadimos a su lista de paises
-                String nom = mapa.getPaisesLibres().get(opc).getNombre();
-                this.jugador.addPais(mapa.getPaisPorNombre(nom));
-                this.jugador.getPais(nom).setNumTropas(1);
-                mapa.getPaisesLibres().get(opc).setPropietario(jugador);
-
-                //Yo creo que no hace falta mas
-                //Revisa el orden del codigo porque es importante porque una vez le asignameos propietario al pais
-                //ya no vamos a encontrarlo en la lista de paises libres
-                //Lo que no se hacer es lo get las tropas
-
-            } else if (!mapa.mapaConquistado()) {
+           if (!mapa.mapaConquistado()) {
                 //mientras que el mapa sea conquistado por un unico jugador la partida no acaba.
                 oos.writeObject(mapa);// envio el mapa al jugador
                 mapa = (Mapa) ois.readObject();// leemos el mapa modificado
